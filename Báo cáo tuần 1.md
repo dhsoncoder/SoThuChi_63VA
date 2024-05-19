@@ -18,20 +18,17 @@
 - Thiết kế giao diện chung của app
 - Tạo được thư mục trên Github
 
-### Thành viên 1:
+### Thành viên 1: Đặng Hải Sơn
 - Công việc 1: Thiết kế giao diện lịch
 
-### Thành viên 2:
-- Công việc 1: Thiết kế giao diện bắt đầu
-- Công việc 2:
+### Thành viên 2: Đỗ Hạnh Thủy
+- Công việc 1: Thiết kế giao diện bắt đầu, trang phân loại quản lý, trang báo cáo
 
-### Thành viên 3:
-- Công việc 1:
-- Công việc 2:
+### Thành viên 3: Giang Vũ
+- Công việc 1: Thiết kế giao diện trang tạo chi tiêu
 
-### Thành viên 4:
-- Công việc 1:
-- Công việc 2:
+### Thành viên 4: Võ Đàm Trường Giang
+- Công việc 1: Thiết kế giao diện trang tạo phân loại mới
 
 ## Vấn Đề Gặp Phải
 Khó khăn trong việc sử dụng figma do chưa có kinh nghiệm. Nhóm sẽ khắc phục dần bằng việc tìm hiểu trên mạng. Vấn đề tương tự xảy ra với việc sử dụng Github.
