@@ -1,6 +1,6 @@
 # Phân công công việc
 
-#Tuần: 1
+# Tuần: 1
 - **Ngày**: 6/5/2024 - 11/5/2024
 
 ## Mục Tiêu Tuần Này
@@ -21,7 +21,7 @@
 - Trạng thái: Đã hoàn thành
 
 
-#Tuần: 2
+# Tuần: 2
 - **Ngày**: 20/5/2024 - 25/5/2024
 
 ## Mục Tiêu Tuần Này
