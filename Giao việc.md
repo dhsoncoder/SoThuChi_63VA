@@ -41,5 +41,5 @@
 - Công việc 1: Thiết kế giao diện trang tạo chi tiêu mới
 - Trạng thái: Đang thực hiện
   
-## Chú ý 1: Mỗi thành viên tạo một branch cá nhân, viết code rồi đẩy lên branch của cá nhân. Nhóm trưởng sẽ phụ trách việc tổng hợp và nối các code với nhau (làm việc với branch chính).
-## Chú ý 2: Cách đặt tên biến cần theo quy chuẩn chung. Ví dụ btn_XemLich,...
+### Chú ý 1: Mỗi thành viên tạo một branch cá nhân, viết code rồi đẩy lên branch của cá nhân. Nhóm trưởng sẽ phụ trách việc tổng hợp và nối các code với nhau (làm việc với branch chính).
+### Chú ý 2: Cách đặt tên biến cần theo quy chuẩn chung. Ví dụ btn_XemLich,...
