@@ -9,6 +9,7 @@
 
 ### Thành viên 1: Đặng Hải Sơn
 - Công việc 1: Thiết kế giao diện lịch
+- Công việc 2: Tạo github chung của nhóm
 - Trạng thái: Đã hoàn thành
 ### Thành viên 2: Đỗ Hạnh Thủy
 - Công việc 1: Thiết kế giao diện bắt đầu, trang phân loại quản lý, trang báo cáo
@@ -29,16 +30,16 @@
 
 ### Thành viên 1: Đặng Hải Sơn
 - Công việc 1: Thiết kế giao diện lịch
-- Trạng thái:
+- Trạng thái: Đang thực hiện
 ### Thành viên 2: Đỗ Hạnh Thủy
 - Công việc 1: Thiết kế giao diện bắt đầu
-- Trạng thái:
+- Trạng thái: Đang thực hiện
 ### Thành viên 3: Giang Vũ
 - Công việc 1: Thiết kế giao diện trang tạo phân loại mới
-- Trạng thái:
+- Trạng thái: Đang thực hiện
 ### Thành viên 4: Võ Đàm Trường Giang
 - Công việc 1: Thiết kế giao diện trang tạo chi tiêu mới
-- Trạng thái:
+- Trạng thái: Đang thực hiện
   
 - **Chú ý 1**: Mỗi thành viên tạo một branch cá nhân, viết code rồi đẩy lên branch của cá nhân. Nhóm trưởng sẽ phụ trách việc tổng hợp và nối các code với nhau (làm việc với branch chính).
 - **Chú ý 2**: Cách đặt tên biến cần theo quy chuẩn chung. Ví dụ btn_XemLich,...
