@@ -5,6 +5,46 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#69C0FF"
     tools:context=".Lich">
+
+    <!-- Layer trắng đè lên nền -->
+    <!-- Điều chỉnh alpha tùy theo mức độ đậm nhạt bạn muốn -->
+
+    <!-- CalendarView -->
+
+    <!-- TextView "Lịch" -->
+
+    <View
+        android:id="@+id/whiteLayer"
+        android:layout_width="411dp"
+        android:layout_height="547dp"
+        android:alpha=""
+        android:background="@color/white"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="180dp" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="406dp"
+        android:layout_height="308dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.456" />
+
+    <TextView
+        android:id="@+id/textViewLich"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lịch"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" /> <!-- Điều chỉnh margin top tùy theo vị trí bạn muốn -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
