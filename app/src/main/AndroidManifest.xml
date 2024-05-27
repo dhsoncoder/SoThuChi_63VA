@@ -13,6 +13,12 @@
         android:theme="@style/Theme.SoThuChi"
         tools:targetApi="31">
         <activity
+            android:name=".TrangBaoCaoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrangPhanLoaiActivity"
+            android:exported="false" />
+        <activity
             android:name=".TrangChinhActivity"
             android:exported="true">
             <intent-filter>
