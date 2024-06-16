@@ -14,7 +14,7 @@
 - **Phát biểu bài toán**:(Sơn làm)
 - **Mục Tiêu Dự Án**: Mục tiêu của dự án "Sổ thu chi" là phát triển một ứng dụng hoặc hệ thống giúp người dùng quản lý thu chi cá nhân một cách hiệu quả. Cụ thể, ứng dụng này có thể giúp người dùng ghi lại và theo dõi các giao dịch tài chính, phân loại chúng thành các khoản thu và chi, tổng hợp thông tin để tạo báo cáo về tình hình tài chính, và cung cấp các công cụ hỗ trợ quyết định về tài chính cá nhân. Điều này giúp người dùng có thể quản lý tài chính một cách tự chủ và hiệu quả hơn.
   
-- **Đối Tượng Người Dùng**: Những cá nhân muốn quản lý tài chính cá nhân một cách có hệ thống, từ học sinh, sinh viên đến người đi làm và cả những người cần quản lý chi tiêu một cách hiệu quả.
+- **Đối Tượng Người Dùng**: Những cá nhân muốn quản lý tài chính một cách có hệ thống, từ học sinh, sinh viên đến người đi làm và cả những người cần quản lý chi tiêu một cách hiệu quả.
   
 ## Quá Trình Phát Triển
 ### Giai Đoạn Khảo Sát và Thu Thập Yêu Cầu
