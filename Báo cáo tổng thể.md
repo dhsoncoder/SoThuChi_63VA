@@ -21,9 +21,13 @@
 - **Yêu Cầu Người Dùng**: (Giang tìm hiểu)
   - Giao Diện Dễ Sử Dụng: Người dùng mong muốn một giao diện người dùng thân thiện và dễ sử dụng, giúp họ dễ dàng ghi lại các giao dịch tài chính một cách nhanh chóng và tiện lợi.
 
-  - Tính Linh Hoạt: Yêu cầu ứng dụng có khả năng linh hoạt để phù hợp với nhu cầu của cả người dùng cá nhân và doanh nghiệp. Người dùng muốn có khả năng phân loại và quản lý các khoản thu chi theo nhiều danh mục khác nhau.
+  - Tính Linh Hoạt: Ứng dụng cần có khả năng linh hoạt để phù hợp với nhu cầu của cả người dùng cá nhân và doanh nghiệp nhỏ. Người dùng muốn có khả năng phân loại và quản lý các khoản thu chi theo nhiều danh mục khác nhau, có thể tùy chỉnh theo ý muốn.
     
-  - Dễ Dàng Xem Lại Lịch Sử Giao Dịch: Người dùng mong muốn có khả năng xem lại lịch sử giao dịch một cách dễ dàng để có thể theo dõi và kiểm tra các khoản thu chi trước đó.
+  - Dễ Dàng Xem Lại Lịch Sử Giao Dịch: Người dùng mong muốn có khả năng xem lại lịch sử giao dịch một cách dễ dàng để có thể theo dõi và kiểm tra các khoản thu chi trước đó. Cung cấp các công cụ tìm kiếm và lọc giao dịch để người dùng nhanh chóng tìm được thông tin cần thiết.
+ 
+  - Báo cáo và phân tích đơn giản: Ứng dụng nên cung cấp các báo cáo chi tiêu dưới dạng biểu đồ và bảng đơn giản, dễ hiểu. Người dùng có thể xem báo cáo theo các khoảng thời gian như hàng tuần, hàng tháng, và hàng năm.
+ 
+  - Tính năng nhắc nhở: Ứng dụng cần có tính năng nhắc nhở các khoản chi phí định kỳ như hóa đơn điện, nước, và các khoản vay. Cho phép người dùng thiết lập nhắc nhở theo thời gian hoặc sự kiện cụ thể.
 
 
 - **Yêu Cầu Hệ Thống**:
