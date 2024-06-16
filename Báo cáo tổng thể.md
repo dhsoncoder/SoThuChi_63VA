@@ -15,8 +15,7 @@
 - **Mục Tiêu Dự Án**: Mục tiêu của dự án "Sổ thu chi" là phát triển một ứng dụng hoặc hệ thống giúp người dùng quản lý thu chi cá nhân một cách hiệu quả. Cụ thể, ứng dụng này có thể giúp người dùng ghi lại và theo dõi các giao dịch tài chính, phân loại chúng thành các khoản thu và chi, tổng hợp thông tin để tạo báo cáo về tình hình tài chính, và cung cấp các công cụ hỗ trợ quyết định về tài chính cá nhân. Điều này giúp người dùng có thể quản lý tài chính một cách tự chủ và hiệu quả hơn.
   
 - **Đối Tượng Người Dùng**: Những cá nhân muốn quản lý tài chính cá nhân một cách có hệ thống, từ học sinh, sinh viên đến người đi làm và cả những người cần quản lý chi tiêu một cách hiệu quả.
-
-- **Các tính năng chính**: Ghi nhận thu nhập, chi tiêu hàng ngày, quản lý ngân sách và tạo báo cáo tài chính cá nhân. (Vũ sửa)
+  
 ## Quá Trình Phát Triển
 ### Giai Đoạn Khảo Sát và Thu Thập Yêu Cầu
 - **Yêu Cầu Người Dùng**: (Giang tìm hiểu)
@@ -47,7 +46,12 @@
   - Ngôn ngữ lập trình Java
   - Android Studio
 - **Chức Năng Chính**:
-  (Mô tả các chức năng chính đã được phát triển.)
+  - Ghi nhận thu nhập và chi tiêu hàng ngày.
+  - Phân loại các khoản thu chi theo danh mục (thu nhập, chi tiêu).
+  - Quản lý ngân sách cá nhân.
+  - Hiển thị số dư hiện tại.
+  - Hiển thị thu chi trên lịch.
+  - Tạo báo cáo tài chính cá nhân với các biểu đồ hàng tháng, hàng năm.
 
 ### Giai Đoạn Kiểm Thử
 - **Phương Pháp Kiểm Thử**:
