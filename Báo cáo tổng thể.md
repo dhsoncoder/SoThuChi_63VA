@@ -11,13 +11,15 @@
   - Thành viên 4: Võ Đàm Trường Giang
 
 ## Tổng Quan Dự Án
-- **Mục Tiêu Dự Án**: Mục tiêu của dự án "Sổ thu chi" là phát triển một ứng dụng hoặc hệ thống giúp người dùng quản lý thu chi cá nhân hoặc doanh nghiệp một cách hiệu quả. Cụ thể, ứng dụng này có thể giúp người dùng ghi lại và theo dõi các giao dịch tài chính, phân loại chúng thành các khoản thu và chi, tổng hợp thông tin để tạo báo cáo về tình hình tài chính, và cung cấp các công cụ hỗ trợ quyết định về tài chính cá nhân. Điều này giúp người dùng có thể quản lý tài chính một cách tự chủ và hiệu quả hơn.
+- **Phát biểu bài toán**:(Sơn làm)
+- **Mục Tiêu Dự Án**: Mục tiêu của dự án "Sổ thu chi" là phát triển một ứng dụng hoặc hệ thống giúp người dùng quản lý thu chi cá nhân một cách hiệu quả. Cụ thể, ứng dụng này có thể giúp người dùng ghi lại và theo dõi các giao dịch tài chính, phân loại chúng thành các khoản thu và chi, tổng hợp thông tin để tạo báo cáo về tình hình tài chính, và cung cấp các công cụ hỗ trợ quyết định về tài chính cá nhân. Điều này giúp người dùng có thể quản lý tài chính một cách tự chủ và hiệu quả hơn.
   
-- **Đối Tượng Người Dùng**: Người dùng cá nhân: bất kỳ ai muốn quản lý tài chính cá nhân của mình, bao gồm việc ghi nhận thu nhập, chi tiêu hàng ngày, quản lý ngân sách và tạo báo cáo tài chính cá nhân.
+- **Đối Tượng Người Dùng**: Người dùng cá nhân: bất kỳ ai muốn quản lý tài chính cá nhân của mình. (Thủy sửa)
 
+- **Các tính năng chính**: Ghi nhận thu nhập, chi tiêu hàng ngày, quản lý ngân sách và tạo báo cáo tài chính cá nhân. (Vũ sửa)
 ## Quá Trình Phát Triển
 ### Giai Đoạn Khảo Sát và Thu Thập Yêu Cầu
-- **Yêu Cầu Người Dùng**:
+- **Yêu Cầu Người Dùng**: (Giang tìm hiểu)
   - Giao Diện Dễ Sử Dụng: Người dùng mong muốn một giao diện người dùng thân thiện và dễ sử dụng, giúp họ dễ dàng ghi lại các giao dịch tài chính một cách nhanh chóng và tiện lợi.
 
   - Tính Linh Hoạt: Yêu cầu ứng dụng có khả năng linh hoạt để phù hợp với nhu cầu của cả người dùng cá nhân và doanh nghiệp. Người dùng muốn có khả năng phân loại và quản lý các khoản thu chi theo nhiều danh mục khác nhau.
