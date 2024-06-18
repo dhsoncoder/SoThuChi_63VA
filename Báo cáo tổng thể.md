@@ -1,4 +1,4 @@
-
+![trangthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/92775445/2374134b-9d79-4aff-9a4a-fd6783f3f121)
 # Báo Cáo Kết Quả Dự Án
 
 ## Thông Tin Chung
@@ -42,10 +42,13 @@
   - Hiệu Suất: Hệ thống cần phải đảm bảo hiệu suất cao, đặc biệt là trong việc xử lý dữ liệu và tạo báo cáo. Cần tối ưu hóa hiệu suất để đảm bảo rằng người dùng có trải nghiệm mượt mà và không gặp trở ngại khi sử dụng ứng dụng.
 
   - Sử dụng nền tảng Android:	Ứng dụng phải hoạt động mượt mà trên các thiết bị Android từ phiên bản 10.0 trở lên.
+ 
+  - Sử dụng lưu trữ trong: Ứng dụng sử dụng lưu trữ trong để lưu trữ dữ liệu. Khi ứng dụng bị gỡ bỏ, toàn bộ nhật ký thu chi sẽ bị xóa.
 
 ### Giai Đoạn Thiết Kế
 - **Thiết Kế Giao Diện**:
-  (Mô tả quá trình và kết quả thiết kế giao diện.)
+  
+
 - **Thiết Kế Kiến Trúc**:
   (Mô tả kiến trúc tổng thể của ứng dụng.)
 
@@ -54,7 +57,7 @@
   - Ngôn ngữ lập trình: Java
   - IDE: Android Studio
   - Cơ sở dữ liệu: SQLite
-  - Thư viên giao diện: 
+  - Thư viện giao diện: SVG Repo
 - **Chức Năng Chính**:
   - Ghi nhận thu nhập và chi tiêu hàng ngày.
   - Phân loại các khoản thu chi theo danh mục (thu nhập, chi tiêu).
