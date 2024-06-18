@@ -48,23 +48,50 @@
 ### Giai Đoạn Thiết Kế
 - **Thiết Kế Giao Diện**:
   -Trang tạo mới: ( trang mở dầu khi vào app )
+
       - Trang tạo thu nhập mới:
         ![trangthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/92775445/2374134b-9d79-4aff-9a4a-fd6783f3f121)
+
       - Trang tạo chi tiêu mới:
+        ![f541eed6aa1f0941500e](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/24ce4422-0164-4771-aa6c-794240806f94)
   - Trang danh sách phân loại:
+
+      - Trạng phân loại chi tiêu:
+        ![58f1ef8aa743041d5d52](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/3139d223-44ec-4844-a7d0-f1972e30aee6)
+
+      - Trang phân loại thu nhập:
+        ![0db3bcc8f401575f0e10](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/5375c96a-a74b-471b-b820-993db76c68a5)
+
       - Trạng tạo phân loại chi tiêu mới:
+        ![c1c962822a4b8915d05a](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/75a86d23-2168-45ab-aa01-77e35fad6c19)
+
       - Trang tạo phân loại thu nhập mới:
+        ![a61f7a5a329391cdc882](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/6292c6cb-2ae8-4f58-9d72-30509f8bcc46)
+  
       - Trang sửa phân loại chi tiêu:
+        ![Screenshot 2024-06-18 222732](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/1107f67b-192d-454e-bdca-186f4fd15074)
+        
       - Trang sửa phân loại thu nhập:
+         ![Screenshot 2024-06-18 222844](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/9b7d5592-25b0-4a43-b897-7b2302fea530)
+
   - Trang lịch:
+    ![83dd78a5656cc6329f7d](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/357b2076-fae7-43dc-9946-c539689e6cc3)
+
   - Trang báo cáo:
       - Trang báo cáo hàng tháng:
           - Trang báo cáo hàng tháng chi tiêu:
+             ![390beea0de697d372478](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/339d82cd-c325-417f-95a2-91b74815cbdf)
+    
           - Trang báo cáo hàng tháng thu nhập:
+             ![4256d6f6e63f45611c2e](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/6461c3a9-343a-46a0-abc7-89388d2e973e)
+            
       - Trang báo cáo hàng năm:
           - Trang báo cáo hàng năm chi tiêu:
+             ![f9543bf10b38a866f129](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/211bfb99-eb75-436d-a377-45f594eab161)
+            
           - Trang báo cáo hàng năm thu nhập:
-          
+             ![e168dcd1e31840461909](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/3d0878cb-7dc5-4eb3-adf5-cbd947ccaf9f)
+            
 
 - **Thiết Kế Kiến Trúc**:
   (Mô tả kiến trúc tổng thể của ứng dụng.)
