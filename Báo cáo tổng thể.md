@@ -1,4 +1,4 @@
-![trangthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/92775445/2374134b-9d79-4aff-9a4a-fd6783f3f121)
+
 # Báo Cáo Kết Quả Dự Án
 
 ## Thông Tin Chung
@@ -47,7 +47,24 @@
 
 ### Giai Đoạn Thiết Kế
 - **Thiết Kế Giao Diện**:
-  
+  -Trang tạo mới: ( trang mở dầu khi vào app )
+      - Trang tạo thu nhập mới:
+        ![trangthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/92775445/2374134b-9d79-4aff-9a4a-fd6783f3f121)
+      - Trang tạo chi tiêu mới:
+  - Trang danh sách phân loại:
+      - Trạng tạo phân loại chi tiêu mới:
+      - Trang tạo phân loại thu nhập mới:
+      - Trang sửa phân loại chi tiêu:
+      - Trang sửa phân loại thu nhập:
+  - Trang lịch:
+  - Trang báo cáo:
+      - Trang báo cáo hàng tháng:
+          - Trang báo cáo hàng tháng chi tiêu:
+          - Trang báo cáo hàng tháng thu nhập:
+      - Trang báo cáo hàng năm:
+          - Trang báo cáo hàng năm chi tiêu:
+          - Trang báo cáo hàng năm thu nhập:
+          
 
 - **Thiết Kế Kiến Trúc**:
   (Mô tả kiến trúc tổng thể của ứng dụng.)
