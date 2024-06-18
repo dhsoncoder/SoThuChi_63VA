@@ -27,7 +27,7 @@
   
 ## Quá Trình Phát Triển
 ### Giai Đoạn Khảo Sát và Thu Thập Yêu Cầu
-- **Yêu Cầu Người Dùng**: (Giang tìm hiểu)
+- **Yêu Cầu Người Dùng**:
   - Giao Diện Dễ Sử Dụng: Người dùng mong muốn một giao diện người dùng thân thiện và dễ sử dụng, giúp họ dễ dàng ghi lại các khoản thu chi tài chính một cách nhanh chóng và tiện lợi.
 
   - Tính Linh Hoạt: Ứng dụng cần có khả năng linh hoạt để phù hợp với nhu cầu của cả người dùng cá nhân. Người dùng muốn có khả năng phân loại và quản lý các khoản thu chi theo nhiều danh mục khác nhau, có thể tùy chỉnh theo ý muốn.
@@ -41,9 +41,7 @@
 
   - Hiệu Suất: Hệ thống cần phải đảm bảo hiệu suất cao, đặc biệt là trong việc xử lý dữ liệu và tạo báo cáo. Cần tối ưu hóa hiệu suất để đảm bảo rằng người dùng có trải nghiệm mượt mà và không gặp trở ngại khi sử dụng ứng dụng.
 
-  - Tích Hợp Đa Nền Tảng: Hệ thống cần có khả năng tích hợp với các nền tảng di động như iOS và Android để người dùng có thể truy cập và sử dụng từ mọi thiết bị di động.
-
-  - Sao Lưu và Phục Hồi Dữ Liệu: Hệ thống cần có các tính năng sao lưu và phục hồi dữ liệu tự động để đảm bảo rằng không có dữ liệu nào bị mất trong trường hợp sự cố xảy ra. 
+  - Sử dụng nền tảng Android:	Ứng dụng phải hoạt động mượt mà trên các thiết bị Android từ phiên bản 10.0 trở lên.
 
 ### Giai Đoạn Thiết Kế
 - **Thiết Kế Giao Diện**:
@@ -53,8 +51,10 @@
 
 ### Giai Đoạn Lập Trình
 - **Công Nghệ Sử Dụng**:
-  - Ngôn ngữ lập trình Java
-  - Android Studio
+  - Ngôn ngữ lập trình: Java
+  - IDE: Android Studio
+  - Cơ sở dữ liệu: SQLite
+  - Thư viên giao diện: 
 - **Chức Năng Chính**:
   - Ghi nhận thu nhập và chi tiêu hàng ngày.
   - Phân loại các khoản thu chi theo danh mục (thu nhập, chi tiêu).
