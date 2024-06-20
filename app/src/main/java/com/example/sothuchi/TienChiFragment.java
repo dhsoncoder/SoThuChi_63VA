@@ -1,13 +1,9 @@
 package com.example.sothuchi;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -23,8 +22,6 @@ import java.util.Locale;
 public class TienChiFragment extends Fragment {
 
     TextView calendarText;
-    CalendarView calendarView;
-    Dialog dialog;
     ImageView imgLeft, imgRight;
     EditText edtExpense, edtNote;
 
@@ -39,11 +36,29 @@ public class TienChiFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         calendarText = view.findViewById(R.id.edt_calender);
-        calendarView = view.findViewById(R.id.calendarView);
         imgLeft = view.findViewById(R.id.imgLeft);
         imgRight = view.findViewById(R.id.imgRight);
         edtExpense = view.findViewById(R.id.edtExpense);
         edtNote = view.findViewById(R.id.edtNote);
+
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select a date");
+        final MaterialDatePicker materialDatePicker = builder.build();
+
+        calendarText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V){
+                materialDatePicker .show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
+            }
+
+        });
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object Selection) {
+                calendarText.setText(materialDatePicker.getHeaderText());
+            }
+        });
 
         // Thiết lập ngày hiện tại cho calendarText
         Calendar calendar = Calendar.getInstance();
@@ -51,30 +66,6 @@ public class TienChiFragment extends Fragment {
         String currentDate = dateFormat.format(calendar.getTime());
         calendarText.setText(currentDate);
 
-        // Initialize dialog
-        dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.item_calender);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(true);
-
-        calendarText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
-
-        CalendarView dialogCalendarView = dialog.findViewById(R.id.calendarView);
-
-        // Set listener for CalendarView inside the dialog
-        dialogCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-                calendarText.setText(selectedDate);
-                dialog.dismiss(); // Dismiss the dialog after selecting a date
-            }
-        });
 
         // Set onClick listeners for imgLeft and imgRight
         imgLeft.setOnClickListener(new View.OnClickListener() {
