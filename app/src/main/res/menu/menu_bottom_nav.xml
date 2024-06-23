@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/trangtaomoi"
+        android:icon="@drawable/ic_new"
+        android:title="@string/trang_taomoi" />
+    <item
+        android:id="@+id/tranglich"
+        android:icon="@drawable/ic_calendar"
+        android:title="@string/trang_lich" />
+    <item
+        android:id="@+id/trangphanloai"
+        android:icon="@drawable/ic_bookmark"
+        android:title="@string/trang_phanloai" />
+    <item
+        android:id="@+id/trangbaocao"
+        android:icon="@drawable/ic_piechart"
+        android:title="@string/trang_baocao" />
+
+</menu>

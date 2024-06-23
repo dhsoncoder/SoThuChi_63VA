@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">So thu chi</string>
+    <string name="app_name">PieChart</string>
+    <string name="trang_taomoi">Nhập vào</string>
+    <string name="trang_lich">Lịch</string>
+    <string name="trang_phanloai">Phân loại</string>
+    <string name="trang_baocao">Báo cáo</string>
 </resources>

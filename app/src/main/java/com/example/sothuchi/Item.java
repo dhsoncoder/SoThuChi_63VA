@@ -37,7 +37,6 @@ public class Item {
      */
     public Integer getThich() {
         return thich;
-        89
     }
     /**
      * @param thich the thich to set
