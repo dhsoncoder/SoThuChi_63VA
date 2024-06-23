@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MA_DANHMUC = "ma_danhmuc";
     public static final String COLUMN_TEN_DANHMUC = "ten_danhmuc";
     public static final String COLUMN_LOAI = "loai";
-    public static final String COLUMN_BIEUTUONG = "bieutuong"; // New column for icon
+    public static final String COLUMN_BIEUTUONG = "bieutuong"; // Changed to int for drawable resource ID
     public static final String COLUMN_MAUSAC = "mausac"; // New column for icon color
 
     public static final String TABLE_THUCHI = "thuchi";
@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_MA_DANHMUC + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_TEN_DANHMUC + " TEXT, " +
                     COLUMN_LOAI + " INTEGER, " +
-                    COLUMN_BIEUTUONG + " TEXT, " +
+                    COLUMN_BIEUTUONG + " INTEGER, " + // Changed type to INTEGER
                     COLUMN_MAUSAC + " TEXT)";
 
     private static final String CREATE_TABLE_THUCHI =
@@ -59,13 +59,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE " + TABLE_DANHMUC + " ADD COLUMN " + COLUMN_BIEUTUONG + " TEXT");
+            db.execSQL("ALTER TABLE " + TABLE_DANHMUC + " ADD COLUMN " + COLUMN_BIEUTUONG + " INTEGER"); // Changed type to INTEGER
             db.execSQL("ALTER TABLE " + TABLE_DANHMUC + " ADD COLUMN " + COLUMN_MAUSAC + " TEXT");
         }
     }
 
     // Insert a record into danhmuc
-    public long insertDanhmuc(String tenDanhmuc, int loai, String bieutuong, String mausac) {
+    public long insertDanhmuc(String tenDanhmuc, int loai, int bieutuong, String mausac) { // Changed bieutuong to int
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TEN_DANHMUC, tenDanhmuc);
@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Update a record in danhmuc
-    public int updateDanhmuc(int maDanhmuc, String tenDanhmuc, int loai, String bieutuong, String mausac) {
+    public int updateDanhmuc(int maDanhmuc, String tenDanhmuc, int loai, int bieutuong, String mausac) { // Changed bieutuong to int
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TEN_DANHMUC, tenDanhmuc);
@@ -133,4 +133,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_THUCHI, COLUMN_MA_THUCHI + " = ?", new String[]{String.valueOf(maThuchi)});
     }
+    // Add this method to your DatabaseHelper class
+    public String getDanhmucName(int maDanhmuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String tenDanhmuc = "";
+
+        Cursor cursor = db.query(TABLE_DANHMUC,
+                new String[]{COLUMN_TEN_DANHMUC},
+                COLUMN_MA_DANHMUC + " = ?",
+                new String[]{String.valueOf(maDanhmuc)},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            tenDanhmuc = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEN_DANHMUC));
+            cursor.close();
+        }
+
+        return tenDanhmuc;
+    }
+    // Add this method to your DatabaseHelper class
+    public String getDanhmucColor(int maDanhmuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String mauSac = "";
+
+        Cursor cursor = db.query(TABLE_DANHMUC,
+                new String[]{COLUMN_MAUSAC},
+                COLUMN_MA_DANHMUC + " = ?",
+                new String[]{String.valueOf(maDanhmuc)},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            mauSac = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAUSAC));
+            cursor.close();
+        }
+
+        return mauSac;
+    }
+
+
 }

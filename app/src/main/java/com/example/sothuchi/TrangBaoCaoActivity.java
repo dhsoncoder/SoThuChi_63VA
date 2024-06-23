@@ -1,18 +1,16 @@
 package com.example.sothuchi;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class TrangBaoCaoActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
@@ -53,13 +51,16 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 select.animate().x(txtnam.getWidth()).setDuration(100);
                 txtthang.setTextColor(def);
                 txtnam.setTextColor(Color.WHITE);
+
+                Intent intent = new Intent(TrangBaoCaoActivity.this, TrangBaoCaoNamActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     private void insertAndQueryData() {
         // Insert a record into the danhmuc table
-        long danhmucId = databaseHelper.insertDanhmuc("Thực phẩm", 1, "thuc_pham_icon.png", "#FF0000");
+        long danhmucId = databaseHelper.insertDanhmuc("Thực phẩm", 1, R.drawable.cake, "#FF0000");
         if (danhmucId != -1) {
             Log.d("TrangBieuDo", "Record inserted into danhmuc table with id: " + danhmucId);
         } else {
@@ -82,7 +83,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 int maDanhmuc = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC));
                 String tenDanhmuc = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEN_DANHMUC));
                 int loai = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LOAI));
-                String bieutuong = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_BIEUTUONG));
+                int bieutuong = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_BIEUTUONG));
                 String mausac = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MAUSAC));
 
                 Log.d("TrangBieuDo", "Danhmuc - ID: " + maDanhmuc + ", Name: " + tenDanhmuc + ", Type: " + loai +

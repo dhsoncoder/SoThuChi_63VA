@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PieChart"
+rootProject.name = "So thu chi"
 include(":app")
