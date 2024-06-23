@@ -3,18 +3,18 @@ package com.example.sothuchi;
 public class ThuchiItem {
     private String tenDanhmuc;
     private double soTien;
-    private int bieuTuong; // Bieu tuong as integer resource ID
-    private String mauSac; // Mau sac as hexadecimal string
+    private int bieuTuong;
+    private String mausac;
+    private float phanTram; // Field for percentage
+    private int soLuong; // Field for count
 
-    public ThuchiItem() {
-        // Default constructor required for Firebase
-    }
-
-    public ThuchiItem(String tenDanhmuc, double soTien, int bieuTuong, String mauSac) {
+    public ThuchiItem(String tenDanhmuc, float phanTram, int soLuong, double soTien, int bieuTuong, String mausac) {
         this.tenDanhmuc = tenDanhmuc;
+        this.phanTram = phanTram;
+        this.soLuong = soLuong;
         this.soTien = soTien;
         this.bieuTuong = bieuTuong;
-        this.mauSac = mauSac;
+        this.mausac = mausac;
     }
 
     public String getTenDanhmuc() {
@@ -42,10 +42,26 @@ public class ThuchiItem {
     }
 
     public String getMauSac() {
-        return mauSac;
+        return mausac;
     }
 
-    public void setMauSac(String mauSac) {
-        this.mauSac = mauSac;
+    public void setMauSac(String mausac) {
+        this.mausac = mausac;
+    }
+
+    public float getPhanTram() {
+        return phanTram;
+    }
+
+    public void setPhanTram(float phanTram) {
+        this.phanTram = phanTram;
+    }
+
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
     }
 }

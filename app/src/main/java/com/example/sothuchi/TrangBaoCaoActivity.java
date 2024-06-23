@@ -59,54 +59,54 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
     }
 
     private void insertAndQueryData() {
-        // Insert a record into the danhmuc table
-        long danhmucId = databaseHelper.insertDanhmuc("Thực phẩm", 1, R.drawable.cake, "#FF0000");
-        if (danhmucId != -1) {
-            Log.d("TrangBieuDo", "Record inserted into danhmuc table with id: " + danhmucId);
-        } else {
-            Log.d("TrangBieuDo", "Failed to insert record into danhmuc table");
-            return;
-        }
-
-        // Insert a record into the thuchi table
-        long thuchiId = databaseHelper.insertThuchi((int) danhmucId, 50000.0, 1, "2023-06-21", "Chi phí bữa trưa");
-        if (thuchiId != -1) {
-            Log.d("TrangBieuDo", "Record inserted into thuchi table with id: " + thuchiId);
-        } else {
-            Log.d("TrangBieuDo", "Failed to insert record into thuchi table");
-        }
-
-        // Query the danhmuc table to verify the record was inserted
-        Cursor danhmucCursor = databaseHelper.getAllDanhmuc();
-        if (danhmucCursor.moveToFirst()) {
-            do {
-                int maDanhmuc = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC));
-                String tenDanhmuc = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEN_DANHMUC));
-                int loai = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LOAI));
-                int bieutuong = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_BIEUTUONG));
-                String mausac = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MAUSAC));
-
-                Log.d("TrangBieuDo", "Danhmuc - ID: " + maDanhmuc + ", Name: " + tenDanhmuc + ", Type: " + loai +
-                        ", Icon: " + bieutuong + ", Color: " + mausac);
-            } while (danhmucCursor.moveToNext());
-        }
-        danhmucCursor.close();
-
-        // Query the thuchi table to verify the record was inserted
-        Cursor thuchiCursor = databaseHelper.getAllThuchi();
-        if (thuchiCursor.moveToFirst()) {
-            do {
-                int maThuchi = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_THUCHI));
-                int maDanhmucThuchi = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
-                double soTien = thuchiCursor.getDouble(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
-                int loai = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LOAI));
-                String ngayThuchi = thuchiCursor.getString(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NGAY_THUCHI));
-                String ghichu = thuchiCursor.getString(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GHICHU));
-
-                Log.d("TrangBieuDo", "Thuchi - ID: " + maThuchi + ", Danhmuc ID: " + maDanhmucThuchi + ", Amount: " + soTien +
-                        ", Type: " + loai + ", Date: " + ngayThuchi + ", Note: " + ghichu);
-            } while (thuchiCursor.moveToNext());
-        }
-        thuchiCursor.close();
+//        // Insert a record into the danhmuc table
+//        long danhmucId = databaseHelper.insertDanhmuc("Thực phẩm", 1, R.drawable.cake, "#FF0000");
+//        if (danhmucId != -1) {
+//            Log.d("TrangBieuDo", "Record inserted into danhmuc table with id: " + danhmucId);
+//        } else {
+//            Log.d("TrangBieuDo", "Failed to insert record into danhmuc table");
+//            return;
+//        }
+//
+//        // Insert a record into the thuchi table
+//        long thuchiId = databaseHelper.insertThuchi((int) danhmucId, 50000.0, 1, "2023-06-21", "Chi phí bữa trưa");
+//        if (thuchiId != -1) {
+//            Log.d("TrangBieuDo", "Record inserted into thuchi table with id: " + thuchiId);
+//        } else {
+//            Log.d("TrangBieuDo", "Failed to insert record into thuchi table");
+//        }
+//
+//        // Query the danhmuc table to verify the record was inserted
+//        Cursor danhmucCursor = databaseHelper.getAllDanhmuc();
+//        if (danhmucCursor.moveToFirst()) {
+//            do {
+//                int maDanhmuc = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC));
+//                String tenDanhmuc = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEN_DANHMUC));
+//                int loai = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LOAI));
+//                int bieutuong = danhmucCursor.getInt(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_BIEUTUONG));
+//                String mausac = danhmucCursor.getString(danhmucCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MAUSAC));
+//
+//                Log.d("TrangBieuDo", "Danhmuc - ID: " + maDanhmuc + ", Name: " + tenDanhmuc + ", Type: " + loai +
+//                        ", Icon: " + bieutuong + ", Color: " + mausac);
+//            } while (danhmucCursor.moveToNext());
+//        }
+//        danhmucCursor.close();
+//
+//        // Query the thuchi table to verify the record was inserted
+//        Cursor thuchiCursor = databaseHelper.getAllThuchi();
+//        if (thuchiCursor.moveToFirst()) {
+//            do {
+//                int maThuchi = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_THUCHI));
+//                int maDanhmucThuchi = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
+//                double soTien = thuchiCursor.getDouble(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
+//                int loai = thuchiCursor.getInt(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_LOAI));
+//                String ngayThuchi = thuchiCursor.getString(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NGAY_THUCHI));
+//                String ghichu = thuchiCursor.getString(thuchiCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GHICHU));
+//
+//                Log.d("TrangBieuDo", "Thuchi - ID: " + maThuchi + ", Danhmuc ID: " + maDanhmucThuchi + ", Amount: " + soTien +
+//                        ", Type: " + loai + ", Date: " + ngayThuchi + ", Note: " + ghichu);
+//            } while (thuchiCursor.moveToNext());
+//        }
+//        thuchiCursor.close();
     }
 }

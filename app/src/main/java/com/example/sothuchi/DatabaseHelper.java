@@ -133,7 +133,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_THUCHI, COLUMN_MA_THUCHI + " = ?", new String[]{String.valueOf(maThuchi)});
     }
-    // Add this method to your DatabaseHelper class
+
+    // Get the name of a specific danhmuc
     public String getDanhmucName(int maDanhmuc) {
         SQLiteDatabase db = this.getReadableDatabase();
         String tenDanhmuc = "";
@@ -151,7 +152,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return tenDanhmuc;
     }
-    // Add this method to your DatabaseHelper class
+
+    // Get the color of a specific danhmuc
     public String getDanhmucColor(int maDanhmuc) {
         SQLiteDatabase db = this.getReadableDatabase();
         String mauSac = "";
@@ -170,5 +172,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mauSac;
     }
 
+    // Get total amount from thuchi
+    public double getTotalAmount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalAmount = 0.0;
+
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI, null);
+        if (cursor.moveToFirst()) {
+            totalAmount = cursor.getDouble(0);
+        }
+        cursor.close();
+        return totalAmount;
+    }
+
+    // Get count of occurrences for a specific maDanhmuc
+    public int getCountByDanhmuc(int maDanhmuc, String tenDanhmuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_DANHMUC + " WHERE " + COLUMN_MA_DANHMUC_THUCHI + " = ? AND " + COLUMN_TEN_DANHMUC + " = ?",
+                new String[]{String.valueOf(maDanhmuc), tenDanhmuc});
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    // Get the icon resource ID of a specific danhmuc
+    public int getDanhmucIcon(int maDanhmuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int bieutuong = 0; // Default value
+
+        Cursor cursor = db.query(TABLE_DANHMUC,
+                new String[]{COLUMN_BIEUTUONG},
+                COLUMN_MA_DANHMUC + " = ?",
+                new String[]{String.valueOf(maDanhmuc)},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            bieutuong = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BIEUTUONG));
+            cursor.close();
+        }
+
+        return bieutuong;
+    }
 
 }

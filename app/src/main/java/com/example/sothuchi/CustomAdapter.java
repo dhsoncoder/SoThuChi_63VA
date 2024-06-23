@@ -1,6 +1,7 @@
 package com.example.sothuchi;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,70 +13,68 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter<ThuchiItem> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
     private Context mContext;
-    private int mResource;
+    private ArrayList<ThuchiItem> mThuchiItems;
 
-    public CustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ThuchiItem> objects) {
-        super(context, resource, objects);
+    public CustomAdapter(Context context, ArrayList<ThuchiItem> thuchiItems) {
         mContext = context;
-        mResource = resource;
+        mThuchiItems = thuchiItems;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
-
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(mResource, parent, false);
-            holder = new ViewHolder();
-            holder.txttenPL = convertView.findViewById(R.id.txttenPL);
-            holder.txtphantramPL = convertView.findViewById(R.id.txtphantramPL);
-            holder.txtsoluongPL = convertView.findViewById(R.id.txtsoluongPL);
-            holder.txttienPL = convertView.findViewById(R.id.txttienPL);
-            holder.imgBieuTuong = convertView.findViewById(R.id.imageView2); // ImageView for icon
-            holder.progressBar = convertView.findViewById(R.id.progress1); // ProgressBar
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        ThuchiItem item = getItem(position);
-
-        if (item != null) {
-            holder.txttenPL.setText(item.getTenDanhmuc());
-            holder.txtphantramPL.setText("50%"); // Example, replace with actual percentage logic
-            holder.txtsoluongPL.setText("1"); // Example, replace with actual quantity logic
-            holder.txttienPL.setText(String.valueOf(item.getSoTien()));
-
-            // Set icon and color
-            holder.imgBieuTuong.setImageResource(item.getBieuTuong()); // Assuming bieuTuong is a drawable resource ID
-
-            try {
-                int color = android.graphics.Color.parseColor(item.getMauSac()); // Set color from item's mauSac
-                ((CardView) convertView.findViewById(R.id.cardviewcolor)).setCardBackgroundColor(color);
-            } catch (IllegalArgumentException exception) {
-                exception.printStackTrace();
-            }
-
-            holder.progressBar.setProgress(50); // Example, replace with actual progress logic
-        }
-
-        return convertView;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list_baocao, parent, false);
+        return new ViewHolder(view);
     }
 
-    private static class ViewHolder {
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ThuchiItem item = mThuchiItems.get(position);
+
+        holder.txttenPL.setText(item.getTenDanhmuc());
+        holder.txtphantramPL.setText(String.format("%.2f%%", item.getPhanTram()));
+        holder.txtsoluongPL.setText(String.valueOf(item.getSoLuong()));
+        holder.txttienPL.setText(String.valueOf(item.getSoTien()));
+        holder.imgBieuTuong.setImageResource(item.getBieuTuong());
+
+        try {
+            int color = Color.parseColor(item.getMauSac());
+            ((CardView) holder.itemView.findViewById(R.id.cardviewcolor)).setCardBackgroundColor(color);
+        } catch (IllegalArgumentException ignored) {
+            // Handle appropriately
+        }
+
+        holder.progressBar.setProgress((int) item.getPhanTram());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mThuchiItems.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txttenPL;
         TextView txtphantramPL;
         TextView txtsoluongPL;
         TextView txttienPL;
         ImageView imgBieuTuong;
         ProgressBar progressBar;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txttenPL = itemView.findViewById(R.id.txttenPL);
+            txtphantramPL = itemView.findViewById(R.id.txtphantramPL);
+            txtsoluongPL = itemView.findViewById(R.id.txtsoluongPL);
+            txttienPL = itemView.findViewById(R.id.txttienPL);
+            imgBieuTuong = itemView.findViewById(R.id.imageView2);
+            progressBar = itemView.findViewById(R.id.progress1);
+        }
     }
 }

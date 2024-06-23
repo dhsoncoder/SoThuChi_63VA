@@ -3,9 +3,11 @@ package com.example.sothuchi;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -20,7 +22,7 @@ public class ChitieuThangActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
     private PieChart pieChart;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private ArrayList<ThuchiItem> thuchiItems;
 
@@ -34,12 +36,13 @@ public class ChitieuThangActivity extends AppCompatActivity {
 
         // Initialize views
         pieChart = findViewById(R.id.chart);
-        listView = findViewById(R.id.listview1);
+        recyclerView = findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize ArrayList and Adapter
         thuchiItems = new ArrayList<>();
-        adapter = new CustomAdapter(this, R.layout.list_baocao, thuchiItems);
-        listView.setAdapter(adapter);
+        adapter = new CustomAdapter(this, thuchiItems);
+        recyclerView.setAdapter(adapter);
 
         // Update UI components
         updateUI();
@@ -47,11 +50,12 @@ public class ChitieuThangActivity extends AppCompatActivity {
 
     private void updateUI() {
         updatePieChart();
-        updateListView();
+        updateRecyclerView();
     }
 
     private void updatePieChart() {
         List<PieEntry> entries = new ArrayList<>();
+        double totalAmount = databaseHelper.getTotalAmount();
         Cursor cursor = databaseHelper.getAllThuchi();
 
         if (cursor.moveToFirst()) {
@@ -59,11 +63,11 @@ public class ChitieuThangActivity extends AppCompatActivity {
                 int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
                 double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
                 String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
-                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc); // Get color from database
+                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
 
-                int color = Color.parseColor(mauSac); // Parse color from string
+                float percentage = (float) (soTien / totalAmount) * 100;
 
-                entries.add(new PieEntry((float) soTien, tenDanhmuc, color));
+                entries.add(new PieEntry(percentage, tenDanhmuc));
             } while (cursor.moveToNext());
         }
 
@@ -76,8 +80,9 @@ public class ChitieuThangActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    private void updateListView() {
-        thuchiItems.clear(); // Clear the ArrayList to avoid duplications
+    private void updateRecyclerView() {
+        thuchiItems.clear();
+        double totalAmount = databaseHelper.getTotalAmount();
         Cursor cursor = databaseHelper.getAllThuchi();
 
         if (cursor.moveToFirst()) {
@@ -85,21 +90,30 @@ public class ChitieuThangActivity extends AppCompatActivity {
                 int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
                 double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
                 String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
-                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc); // Get color from database
+                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
+                int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
 
-                // Create ThuchiItem object and add to list for ListView
-                ThuchiItem item = new ThuchiItem();
-                item.setTenDanhmuc(tenDanhmuc);
-                item.setSoTien(soTien);
-                item.setBieuTuong(R.drawable.cake); // Set your icon here
-                item.setMauSac(mauSac); // Set color from SQLite
-                thuchiItems.add(item);
+                float percentage = (float) (soTien / totalAmount) * 100;
+
+                // Check if the item with the same icon and category name already exists
+                boolean exists = false;
+                for (ThuchiItem item : thuchiItems) {
+                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getBieuTuong() == bieutuong) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    // If not exists, count occurrences and add to list
+                    int count = databaseHelper.getCountByDanhmuc(maDanhmuc, tenDanhmuc);
+                    ThuchiItem item = new ThuchiItem(tenDanhmuc, percentage, count, soTien, bieutuong, mauSac);
+                    thuchiItems.add(item);
+                }
             } while (cursor.moveToNext());
         }
 
-        // Notify the adapter that data set has changed
         adapter.notifyDataSetChanged();
-
         cursor.close();
     }
 }
