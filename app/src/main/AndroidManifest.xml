@@ -19,9 +19,6 @@
             android:name=".ThunhapThangActivity"
             android:exported="false" />
         <activity
-            android:name=".ChitieuThangActivity"
-            android:exported="true" />
-        <activity
             android:name=".TrangPhanLoaiActivity"
             android:exported="false" />
         <activity
