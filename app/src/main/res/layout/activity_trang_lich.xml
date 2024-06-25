@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:text="0đ"
                             android:textAlignment="center"
-                            android:textColor="#FF9800"
+                            android:textColor="#08FF00"
                             android:textStyle="bold" />
                     </LinearLayout>
 
