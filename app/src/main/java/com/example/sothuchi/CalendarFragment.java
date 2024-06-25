@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 
 public class CalendarFragment extends Fragment {
-
+    private DatabaseHelper dbHelper;
+    private ListView lvThuChi;
+    private ThuChiAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
