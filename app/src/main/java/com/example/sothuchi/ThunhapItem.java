@@ -1,6 +1,6 @@
 package com.example.sothuchi;
 
-public class ThuchiItem {
+public class ThunhapItem {
     private String tenDanhmuc;
     private double soTien;
     private int bieuTuong;
@@ -8,7 +8,7 @@ public class ThuchiItem {
     private float phanTram; // Field for percentage
     private int soLuong; // Field for count
 
-    public ThuchiItem(String tenDanhmuc, float phanTram, int soLuong, double soTien, int bieuTuong, String mausac) {
+    public ThunhapItem(String tenDanhmuc, float phanTram, int soLuong, double soTien, int bieuTuong, String mausac) {
         this.tenDanhmuc = tenDanhmuc;
         this.phanTram = phanTram;
         this.soLuong = soLuong;
