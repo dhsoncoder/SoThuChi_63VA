@@ -69,105 +69,111 @@
         android:background="@drawable/layout_view">
 
         <!-- Expense and Income Summary -->
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtchonthang"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btnlui"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:background="#00FFFFFF"
-                    app:srcCompat="@drawable/ic_back" />
-
-                <TextView
-                    android:id="@+id/txtchonthang"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/layout_view2"
-                    android:padding="10dp"
-                    android:text="Tháng 4 Năm 2024"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
-
-                <ImageButton
-                    android:id="@+id/btntiep"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:background="#00FFFFFF"
-                    app:srcCompat="@drawable/ic_forward" />
-            </LinearLayout>
-
-
-            <TabHost
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-
-                <TabWidget
-                    android:id="@android:id/tabs"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btnchonnam"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:id="@+id/tabchitieu"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
 
-                        <include
-                            layout="@layout/activity_chitieu_thang"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                        <ImageButton
+                            android:id="@+id/btnlui"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="#00FFFFFF"
+                            app:srcCompat="@drawable/ic_back" />
+
+                        <Button
+                            android:id="@+id/btnchonnam"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="#CDC9C9"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="10dp"
+                            android:text="Năm 2024"
+                            android:textColor="#000000"
+                            android:textSize="18sp" />
+
+                        <ImageButton
+                            android:id="@+id/btntiep"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:background="#00FFFFFF"
+                            app:srcCompat="@drawable/ic_forward" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/tabthunhap"
+                    <TabHost
+                        android:id="@+id/Tabhost2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
-                        <include
-                            layout="@layout/activity_thunhap_thang"
+
+                        <TabWidget
+                            android:id="@android:id/tabs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </LinearLayout>
 
-                </FrameLayout>
+                        <FrameLayout
+                            android:id="@android:id/tabcontent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-            </TabHost>
+                            <LinearLayout
+                                android:id="@+id/tabchitieu"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-        </LinearLayout>
+                                <include
+                                    layout="@layout/activity_chitieu_nam"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="420dp"
-            android:background="#FFFFFF"
-            android:visibility="visible"
-            app:itemIconTint="#606060"
-            app:itemTextColor="#606060"
-            app:menu="@menu/menu_bottom_nav" />
+                            <LinearLayout
+                                android:id="@+id/tabthunhap"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <include
+                                    layout="@layout/activity_thunhap_nam"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                        </FrameLayout>
+
+                    </TabHost>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
 
     </FrameLayout>

@@ -290,12 +290,90 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI +
                 " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND " +
                 " strftime('%m', " + COLUMN_NGAY_THUCHI + ") = ? AND " +
-                COLUMN_LOAI + " = ?";
+                COLUMN_LOAI + " = ?" +
+                " GROUP BY " + COLUMN_MA_DANHMUC_THUCHI; // Group by danh mục
 
         try {
             cursor = db.rawQuery(query, new String[]{
                     String.valueOf(year),
                     String.format("%02d", month + 1), // SQLite month is 1-based
+                    String.valueOf(type)
+            });
+
+            if (cursor.moveToFirst()) {
+                do {
+                    totalAmount += cursor.getDouble(0);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return totalAmount;
+    }
+
+    public Cursor getAllThuchiByYearAndType(int year, int type) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = { COLUMN_MA_DANHMUC_THUCHI, COLUMN_SO_TIEN };
+        String selection = "strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND " + COLUMN_LOAI + " = ?";
+        String[] selectionArgs = { String.valueOf(year), String.valueOf(type) };
+
+        return db.query(TABLE_THUCHI, columns, selection, selectionArgs, null, null, null);
+    }
+
+    public double getTotalAmountByYear(int year) {
+        double totalAmount = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String query = "SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI +
+                " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ?";
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(year)});
+
+            if (cursor.moveToFirst()) {
+                totalAmount = cursor.getDouble(0);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return totalAmount;
+    }
+    public int getDanhmucId(String tenDanhmuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int maDanhmuc = -1; // Giá trị mặc định nếu không tìm thấy
+
+        Cursor cursor = db.query(TABLE_DANHMUC,
+                new String[]{COLUMN_MA_DANHMUC, COLUMN_TEN_DANHMUC},
+                COLUMN_TEN_DANHMUC + "=?",
+                new String[]{tenDanhmuc},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MA_DANHMUC));
+            cursor.close();
+        }
+
+        return maDanhmuc;
+    }
+    public double getTotalAmountByYear(int year, int type) {
+        double totalAmount = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String query = "SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI +
+                " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND " + COLUMN_LOAI + " = ?";
+
+        try {
+            cursor = db.rawQuery(query, new String[]{
+                    String.valueOf(year),
                     String.valueOf(type)
             });
 
@@ -310,6 +388,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return totalAmount;
     }
+
 
 
 }

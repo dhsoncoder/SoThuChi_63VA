@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,9 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
     private int currentYear;
     private int currentMonth;
 
+    private ScrollView scrollView;
+    private TextView txtsoluongPL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,16 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         txttongchithang = findViewById(R.id.txttongchithang);
         txttongthuthang = findViewById(R.id.txttongthuthang);
         txttongthang = findViewById(R.id.txttongthang);
+        txtsoluongPL = findViewById(R.id.txtsoluongPL);
+        scrollView = findViewById(R.id.scrollView);
+
+        // Add code to scroll to top when activity starts
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.smoothScrollTo(0, 0);
+            }
+        });
 
         tabHost = findViewById(R.id.tabhost);
         tabHost.setup();
@@ -76,6 +90,19 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         tabtn.setContent(R.id.tabthunhap);
         tabtn.setIndicator("Thu nhập");
         tabHost.addTab(tabtn);
+
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                // Scroll to top of scrollView when tab changes
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.scrollTo(0, 0);
+                    }
+                });
+            }
+        });
 
         // Store the default text color
         def = txtnam.getTextColors();
@@ -200,8 +227,8 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
     }
 
     private void updatePieChartChitieu() {
-        List<PieEntry> entries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+        List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
 
         Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
 
@@ -213,25 +240,57 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
                 int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
 
-                float percentage = (float) (soTien / totalAmount) * 100;
+                // Kiểm tra xem nhóm danh mục đã tồn tại trong groupedEntries chưa
+                boolean found = false;
+                for (GroupedThuchiItem item : groupedEntries) {
+                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getMauSac().equals(mauSac) && item.getBieutuong() == bieutuong) {
+                        item.addSoTien(soTien);
+                        found = true;
+                        break;
+                    }
+                }
 
-                entries.add(new PieEntry(percentage, tenDanhmuc));
+                // Nếu chưa tồn tại, thêm vào groupedEntries
+                if (!found) {
+                    groupedEntries.add(new GroupedThuchiItem(tenDanhmuc, mauSac, bieutuong, soTien));
+                }
+
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
+        // Tạo danh sách PieEntry từ groupedEntries
+        List<PieEntry> entries = new ArrayList<>();
+        for (GroupedThuchiItem item : groupedEntries) {
+            float percentage = (float) ((item.getSoTien() / totalAmount) * 100);
+            entries.add(new PieEntry(percentage, item.getTenDanhmuc()));
+        }
+
+        // Thiết lập màu sắc cho từng PieEntry
+        List<Integer> colors = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) {
+            int color = Color.parseColor(groupedEntries.get(i).getMauSac());
+            colors.add(color);
+        }
+
+        // Tạo PieDataSet và thiết lập dữ liệu
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setColors(colors);
         dataSet.setValueTextColor(Color.WHITE);
+
+        // Tạo PieData và thiết lập vào PieChart
         PieData pieData = new PieData(dataSet);
         pieChartChitieu.setData(pieData);
         pieChartChitieu.invalidate();
-        cursor.close();
     }
 
     private void updateRecyclerViewChitieu() {
         thuchiItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
         Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
+
+        List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
@@ -241,28 +300,49 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
                 int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
 
-                float percentage = (float) (soTien / totalAmount) * 100;
+                // Kiểm tra xem nhóm danh mục đã tồn tại trong groupedEntries chưa
+                boolean found = false;
+                for (GroupedThuchiItem item : groupedEntries) {
+                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getMauSac().equals(mauSac) && item.getBieutuong() == bieutuong) {
+                        item.addSoTien(soTien);
+                        found = true;
+                        break;
+                    }
+                }
 
-                ThuchiItem item = new ThuchiItem(tenDanhmuc, percentage, 1, soTien, bieutuong, mauSac);
-                thuchiItems.add(item);
+                // Nếu chưa tồn tại, thêm vào groupedEntries
+                if (!found) {
+                    groupedEntries.add(new GroupedThuchiItem(tenDanhmuc, mauSac, bieutuong, soTien));
+                }
+
             } while (cursor.moveToNext());
         }
 
-        adapter.notifyDataSetChanged();
         cursor.close();
 
-        // Show a message if no data is available for the selected month
+        // Tạo danh sách ThuchiItem từ groupedEntries
+        for (GroupedThuchiItem item : groupedEntries) {
+            float percentage = (float) ((item.getSoTien() / totalAmount) * 100);
+            ThuchiItem thuchiItem = new ThuchiItem(item.getTenDanhmuc(), percentage, 1, item.getSoTien(), item.getBieutuong(), item.getMauSac());
+            thuchiItems.add(thuchiItem);
+        }
+
+        adapter.notifyDataSetChanged();
+
+        // Hiển thị thông báo nếu không có dữ liệu cho tháng được chọn
         if (thuchiItems.isEmpty()) {
             Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
 
     private void updatePieChartThunhap() {
-        List<PieEntry> entries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+        List<GroupedThunhapItem> groupedEntries = new ArrayList<>();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1); // Type 1 for income
 
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1);
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1); // Type 1 for income
 
         if (cursor.moveToFirst()) {
             do {
@@ -272,25 +352,59 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
                 int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
 
-                float percentage = (float) (soTien / totalAmount) * 100;
+                // Check if the category is already in groupedEntries
+                boolean found = false;
+                for (GroupedThunhapItem item : groupedEntries) {
+                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getMauSac().equals(mauSac) && item.getBieutuong() == bieutuong) {
+                        item.addSoTien(soTien);
+                        found = true;
+                        break;
+                    }
+                }
 
-                entries.add(new PieEntry(percentage, tenDanhmuc));
+                // If not found, add a new entry to groupedEntries
+                if (!found) {
+                    groupedEntries.add(new GroupedThunhapItem(tenDanhmuc, mauSac, bieutuong, soTien));
+                }
+
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
+        // Create PieEntries with correct percentage based on totalAmount
+        List<PieEntry> entries = new ArrayList<>();
+        for (GroupedThunhapItem item : groupedEntries) {
+            float percentage = (float) ((item.getSoTien() / totalAmount) * 100);
+            entries.add(new PieEntry(percentage, item.getTenDanhmuc()));
+        }
+
+        // Set colors for each PieEntry
+        List<Integer> colors = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) {
+            int color = Color.parseColor(groupedEntries.get(i).getMauSac());
+            colors.add(color);
+        }
+
+        // Create PieDataSet and set data
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setColors(colors);
         dataSet.setValueTextColor(Color.WHITE);
+
+        // Create PieData and set to PieChart
         PieData pieData = new PieData(dataSet);
         pieChartThunhap.setData(pieData);
         pieChartThunhap.invalidate();
-        cursor.close();
     }
+
+
 
     private void updateRecyclerViewThunhap() {
         thunhapItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1);
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1); // Type 1 for income
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1); // Type 1 for income
+
+        List<GroupedThunhapItem> groupedEntries = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
@@ -300,21 +414,41 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
                 int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
 
-                float percentage = (float) (soTien / totalAmount) * 100;
+                // Check if the category is already in groupedEntries
+                boolean found = false;
+                for (GroupedThunhapItem item : groupedEntries) {
+                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getMauSac().equals(mauSac) && item.getBieutuong() == bieutuong) {
+                        item.addSoTien(soTien);
+                        found = true;
+                        break;
+                    }
+                }
 
-                ThunhapItem item = new ThunhapItem(tenDanhmuc, percentage, 1, soTien, bieutuong, mauSac);
-                thunhapItems.add(item);
+                // If not found, add a new entry to groupedEntries
+                if (!found) {
+                    groupedEntries.add(new GroupedThunhapItem(tenDanhmuc, mauSac, bieutuong, soTien));
+                }
+
             } while (cursor.moveToNext());
         }
 
-        adapter.notifyDataSetChanged();
         cursor.close();
 
+        // Create ThunhapItem list from groupedEntries
+        for (GroupedThunhapItem item : groupedEntries) {
+            float percentage = (float) ((item.getSoTien() / totalAmount) * 100);
+            ThunhapItem thunhapItem = new ThunhapItem(item.getTenDanhmuc(), percentage, 1, item.getSoTien(), item.getBieutuong(), item.getMauSac());
+            thunhapItems.add(thunhapItem);
+        }
+
+        adapter.notifyDataSetChanged();
+
         // Show a message if no data is available for the selected month
-        if (thuchiItems.isEmpty()) {
+        if (thunhapItems.isEmpty()) {
             Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void showDatePicker() {
         int year = currentYear;
         int month = currentMonth;
