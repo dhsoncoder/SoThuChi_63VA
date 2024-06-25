@@ -48,12 +48,11 @@
 ### Giai Đoạn Thiết Kế
 - **Thiết Kế Giao Diện**:
   -Trang tạo mới: ( trang mở dầu khi vào app )
+      - Trang tạo thu nhập mới
+        ![tienThu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/e9cfe0e5-1fc0-4b91-a591-0ffa380f173a)
+      - Trang tạo chi tiêu mới
+        ![tienChi](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/17fe6866-b2b9-43eb-9323-d49c8b7a78e8)
 
-      - Trang tạo thu nhập mới:
-        ![trangthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/92775445/2374134b-9d79-4aff-9a4a-fd6783f3f121)
-
-      - Trang tạo chi tiêu mới:
-        ![f541eed6aa1f0941500e](https://github.com/dhsoncoder/SoThuChi_63VA/assets/158030200/24ce4422-0164-4771-aa6c-794240806f94)
   - Trang danh sách phân loại:
 
       - Trạng phân loại chi tiêu:
