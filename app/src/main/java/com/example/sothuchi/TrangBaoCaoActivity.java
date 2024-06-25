@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,17 +29,20 @@ import java.util.Calendar;
 import java.util.List;
 
 public class TrangBaoCaoActivity extends AppCompatActivity {
+
     private DatabaseHelper databaseHelper;
     private ColorStateList def;
-    private TextView txtthang, txtnam, select;
+    private TextView txtthang, txtnam, select, txttongchithang, txttongthuthang, txttongthang ;
     private Button btnchonthang;
     private ImageButton btnlui, btntiep;
     private TabHost tabHost;
 
-    private PieChart pieChart;
-    private RecyclerView recyclerView;
-    private CustomAdapter adapter;
+    private PieChart pieChartChitieu, pieChartThunhap;
+    private RecyclerView recyclerViewChitieu, recyclerViewThunhap ;
+    private ChitieuAdapter adapter;
+    private ThunhapAdapter adapter2;
     private ArrayList<ThuchiItem> thuchiItems;
+    private ArrayList<ThunhapItem> thunhapItems;
 
     private int currentYear;
     private int currentMonth;
@@ -54,6 +58,9 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         btnchonthang = findViewById(R.id.btnchonthang);
         btnlui = findViewById(R.id.btnlui);
         btntiep = findViewById(R.id.btntiep);
+        txttongchithang = findViewById(R.id.txttongchithang);
+        txttongthuthang = findViewById(R.id.txttongthuthang);
+        txttongthang = findViewById(R.id.txttongthang);
 
         tabHost = findViewById(R.id.tabhost);
         tabHost.setup();
@@ -139,14 +146,21 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         });
 
         // Initialize views
-        pieChart = findViewById(R.id.chart);
-        recyclerView = findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        pieChartChitieu = findViewById(R.id.chartchitieu);
+        recyclerViewChitieu = findViewById(R.id.recyclerviewchitieu);
+        recyclerViewChitieu.setLayoutManager(new LinearLayoutManager(this));
+
+        pieChartThunhap = findViewById(R.id.chartthunhap);
+        recyclerViewThunhap = findViewById(R.id.recyclerviewthunhap);
+        recyclerViewThunhap.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize ArrayList and Adapter
         thuchiItems = new ArrayList<>();
-        adapter = new CustomAdapter(this, thuchiItems);
-        recyclerView.setAdapter(adapter);
+        thunhapItems = new ArrayList<>();
+        adapter2 = new ThunhapAdapter(this, thunhapItems);
+        adapter = new ChitieuAdapter(this, thuchiItems);
+        recyclerViewChitieu.setAdapter(adapter);
+        recyclerViewThunhap.setAdapter(adapter2);
 
         // Update UI components
         updateMonthText(); // Update the initial text of btnchonthang
@@ -159,41 +173,37 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        updatePieChart();
-        updateRecyclerView();
+        updateTabChiTieu(); // Update Chi tiêu tab
+        updateTabThuNhap(); // Update Thu nhập tab
+
+        // Calculate and set total expenses
+        double totalExpense = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
+        txttongchithang.setText(String.format("-%,.0f", totalExpense));
+
+        // Calculate and set total income
+        double totalIncome = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1);
+        txttongthuthang.setText(String.format("+%,.0f", totalIncome));
+
+        // Calculate and set net income
+        double netIncome = totalIncome - totalExpense;
+        txttongthang.setText(String.format("%+,.0f", netIncome));
     }
 
-    private void updatePieChart() {
+    private void updateTabChiTieu() {
+        updatePieChartChitieu();
+        updateRecyclerViewChitieu();
+    }
+
+    private void updateTabThuNhap() {
+        updatePieChartThunhap();
+        updateRecyclerViewThunhap();
+    }
+
+    private void updatePieChartChitieu() {
         List<PieEntry> entries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmount();
-        Cursor cursor = databaseHelper.getAllThuchi();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
 
-        if (cursor.moveToFirst()) {
-            do {
-                int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
-                double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
-                String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
-                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
-
-                float percentage = (float) (soTien / totalAmount) * 100;
-
-                entries.add(new PieEntry(percentage, tenDanhmuc));
-            } while (cursor.moveToNext());
-        }
-
-        PieDataSet dataSet = new PieDataSet(entries, "Thuchi Data");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS); // Set a default color palette
-        dataSet.setValueTextColor(Color.WHITE); // Set text color for data values
-        PieData pieData = new PieData(dataSet);
-        pieChart.setData(pieData);
-        pieChart.invalidate();
-        cursor.close();
-    }
-
-    private void updateRecyclerView() {
-        thuchiItems.clear();
-        double totalAmount = databaseHelper.getTotalAmount();
-        Cursor cursor = databaseHelper.getAllThuchi();
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
 
         if (cursor.moveToFirst()) {
             do {
@@ -205,28 +215,106 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
                 float percentage = (float) (soTien / totalAmount) * 100;
 
-                // Check if the item with the same icon and category name already exists
-                boolean exists = false;
-                for (ThuchiItem item : thuchiItems) {
-                    if (item.getTenDanhmuc().equals(tenDanhmuc) && item.getBieuTuong() == bieutuong) {
-                        exists = true;
-                        break;
-                    }
-                }
+                entries.add(new PieEntry(percentage, tenDanhmuc));
+            } while (cursor.moveToNext());
+        }
 
-                if (!exists) {
-                    // If not exists, count occurrences and add to list
-                    int count = databaseHelper.getCountByDanhmuc(maDanhmuc, tenDanhmuc);
-                    ThuchiItem item = new ThuchiItem(tenDanhmuc, percentage, count, soTien, bieutuong, mauSac);
-                    thuchiItems.add(item);
-                }
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setValueTextColor(Color.WHITE);
+        PieData pieData = new PieData(dataSet);
+        pieChartChitieu.setData(pieData);
+        pieChartChitieu.invalidate();
+        cursor.close();
+    }
+
+    private void updateRecyclerViewChitieu() {
+        thuchiItems.clear();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
+                double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
+                String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
+                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
+                int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
+
+                float percentage = (float) (soTien / totalAmount) * 100;
+
+                ThuchiItem item = new ThuchiItem(tenDanhmuc, percentage, 1, soTien, bieutuong, mauSac);
+                thuchiItems.add(item);
             } while (cursor.moveToNext());
         }
 
         adapter.notifyDataSetChanged();
         cursor.close();
+
+        // Show a message if no data is available for the selected month
+        if (thuchiItems.isEmpty()) {
+            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+        }
     }
 
+
+    private void updatePieChartThunhap() {
+        List<PieEntry> entries = new ArrayList<>();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
+                double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
+                String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
+                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
+                int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
+
+                float percentage = (float) (soTien / totalAmount) * 100;
+
+                entries.add(new PieEntry(percentage, tenDanhmuc));
+            } while (cursor.moveToNext());
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setValueTextColor(Color.WHITE);
+        PieData pieData = new PieData(dataSet);
+        pieChartThunhap.setData(pieData);
+        pieChartThunhap.invalidate();
+        cursor.close();
+    }
+
+    private void updateRecyclerViewThunhap() {
+        thunhapItems.clear();
+        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth);
+        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int maDanhmuc = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_MA_DANHMUC_THUCHI));
+                double soTien = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SO_TIEN));
+                String tenDanhmuc = databaseHelper.getDanhmucName(maDanhmuc);
+                String mauSac = databaseHelper.getDanhmucColor(maDanhmuc);
+                int bieutuong = databaseHelper.getDanhmucIcon(maDanhmuc);
+
+                float percentage = (float) (soTien / totalAmount) * 100;
+
+                ThunhapItem item = new ThunhapItem(tenDanhmuc, percentage, 1, soTien, bieutuong, mauSac);
+                thunhapItems.add(item);
+            } while (cursor.moveToNext());
+        }
+
+        adapter.notifyDataSetChanged();
+        cursor.close();
+
+        // Show a message if no data is available for the selected month
+        if (thuchiItems.isEmpty()) {
+            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void showDatePicker() {
         int year = currentYear;
         int month = currentMonth;
@@ -246,7 +334,4 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void insertAndQueryData() {
-        // Database operations (insert and query) here
-    }
 }

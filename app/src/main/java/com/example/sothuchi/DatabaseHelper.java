@@ -217,5 +217,99 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return bieutuong;
     }
+    // Calculate total amount from thuchi table based on loai
+    public double getTotalAmountByLoai(int loai) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalAmount = 0;
+
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_SO_TIEN + ") AS Total FROM " + TABLE_THUCHI +
+                " WHERE " + COLUMN_LOAI + " = ?", new String[]{String.valueOf(loai)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            totalAmount = cursor.getDouble(cursor.getColumnIndexOrThrow("Total"));
+            cursor.close();
+        }
+
+        return totalAmount;
+    }
+    // Get all records from thuchi table based on loai
+    public Cursor getAllThuchiByLoai(int loai) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.query(TABLE_THUCHI,
+                null,
+                COLUMN_LOAI + " = ?",
+                new String[]{String.valueOf(loai)},
+                null, null, null);
+    }
+    public Cursor getAllThuchiByMonth(int year, int month) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] columns = {
+                COLUMN_MA_DANHMUC_THUCHI,
+                COLUMN_SO_TIEN,
+                // Add other columns you need
+        };
+        String selection = "strftime('%Y-%m', " + COLUMN_NGAY_THUCHI + ") = ?";
+        String[] selectionArgs = { String.format("%04d-%02d", year, month + 1) }; // SQLite uses 1-based month
+
+        return db.query(TABLE_THUCHI, columns, selection, selectionArgs, null, null, null);
+    }
+    public double getTotalAmountByMonth(int year, int month) {
+        double totalAmount = 0.0;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = { "SUM(" + COLUMN_SO_TIEN + ")" };
+        String selection = "strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND strftime('%m', " + COLUMN_NGAY_THUCHI + ") = ?";
+        String[] selectionArgs = { String.valueOf(year), String.format("%02d", month + 1) }; // month + 1 because SQLite month starts from 1
+
+        Cursor cursor = db.query(TABLE_THUCHI, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            totalAmount = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        return totalAmount;
+    }
+    public Cursor getAllThuchiByMonthAndType(int year, int month, int loaiDanhMuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = { COLUMN_MA_DANHMUC_THUCHI, COLUMN_SO_TIEN };
+        String selection = "strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND strftime('%m', " + COLUMN_NGAY_THUCHI + ") = ? AND " + COLUMN_LOAI + " = ?";
+        String[] selectionArgs = { String.valueOf(year), String.format("%02d", month + 1), String.valueOf(loaiDanhMuc) }; // month + 1 because SQLite month starts from 1
+
+        return db.query(TABLE_THUCHI, columns, selection, selectionArgs, null, null, null);
+    }
+
+    public double getTotalAmountByMonth(int year, int month, int type) {
+        double totalAmount = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        // Ensure correct table name is used (TABLE_THUCHI)
+        String query = "SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI +
+                " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND " +
+                " strftime('%m', " + COLUMN_NGAY_THUCHI + ") = ? AND " +
+                COLUMN_LOAI + " = ?";
+
+        try {
+            cursor = db.rawQuery(query, new String[]{
+                    String.valueOf(year),
+                    String.format("%02d", month + 1), // SQLite month is 1-based
+                    String.valueOf(type)
+            });
+
+            if (cursor.moveToFirst()) {
+                totalAmount = cursor.getDouble(0);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return totalAmount;
+    }
+
 
 }

@@ -5,24 +5,22 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class ChitieuAdapter extends RecyclerView.Adapter<ChitieuAdapter.ViewHolder> {
 
     private Context mContext;
     private ArrayList<ThuchiItem> mThuchiItems;
 
-    public CustomAdapter(Context context, ArrayList<ThuchiItem> thuchiItems) {
+    public ChitieuAdapter(Context context, ArrayList<ThuchiItem> thuchiItems) {
         mContext = context;
         mThuchiItems = thuchiItems;
     }
