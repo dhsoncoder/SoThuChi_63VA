@@ -110,21 +110,61 @@
   - Hiển thị báo cáo tài chính cá nhân với các biểu đồ theo thời gian.
 
 ### Giai Đoạn Kiểm Thử
-- **Phương Pháp Kiểm Thử**:
-  (Mô tả các phương pháp kiểm thử đã áp dụng.)
+- **Phương Pháp Kiểm Thử**: Kiểm thử hộp đen
+## 1. Phân tích yêu cầu và thiết kế
+
+### Phân tích yêu cầu người dùng:
+- **Chức năng**: Đảm bảo các chức năng chính như ghi nhận thu chi, phân loại, báo cáo đều hoạt động chính xác và như mong đợi.
+- **Giao diện người dùng**: Kiểm tra tính thân thiện và đơn giản của giao diện, đảm bảo dễ dàng sử dụng và hiệu quả cho người dùng.
+
+### Phân tích yêu cầu hệ thống:
+- **Hiệu suất**: Kiểm tra hiệu suất hệ thống khi xử lý số liệu lớn, đảm bảo ứng dụng hoạt động mượt mà và không gây lag.
+- **Mở rộng**: Đảm bảo hệ thống có khả năng mở rộng để thích ứng với sự phát triển và số lượng người dùng tăng cao.
+
+## 2. Các kịch bản kiểm thử
+
+### Kiểm tra tính năng chính:
+- Ghi nhận một khoản thu mới và xác nhận dữ liệu được lưu trữ đúng.
+- Ghi nhận một khoản chi mới và xem lại trong danh sách các khoản chi.
+
+### Kiểm tra tính năng phụ:
+- Phân loại thu nhập và chi tiêu theo danh mục và xem kết quả phân loại.
+- Tạo và xem các báo cáo tài chính theo thời gian (hàng tháng, hàng năm).
+
+### Kiểm tra hiệu suất:
+- Thử nghiệm với tập dữ liệu lớn để đánh giá hiệu suất khi tải dữ liệu và tạo báo cáo.
+
+## 3. Phương pháp thực hiện
+
+- **Kiểm thử mô phỏng dữ liệu đầu vào**: Sử dụng dữ liệu đầu vào mô phỏng để kiểm tra các kịch bản và các trường hợp biên.
+- **Kiểm thử tích hợp**: Đảm bảo tích hợp giữa các thành phần như giao diện người dùng, cơ sở dữ liệu và logic ứng dụng hoạt động ổn định.
+
 - **Kết Quả Kiểm Thử**:
-  (Mô tả kết quả kiểm thử và các lỗi phát hiện được.)
+#### 1. Kiểm tra tính năng ghi nhận
+
+- **Mục đích**: Đảm bảo rằng hệ thống ghi nhận các khoản thu chi chính xác và hiệu quả.
+- **Bước thực hiện**: Nhập dữ liệu mẫu (ví dụ: một khoản thu nhập mới), kiểm tra xem liệu dữ liệu đã được cập nhật đúng trong cơ sở dữ liệu hay không.
+- **Kết quả mong đợi**: Hệ thống cần lưu trữ thông tin khoản thu nhập mới và hiển thị chính xác trong danh sách các khoản thu.
+
+#### 2. Kiểm tra tính năng phân loại
+
+- **Mục đích**: Đảm bảo rằng hệ thống phân loại các khoản thu chi theo danh mục chính xác.
+- **Bước thực hiện**: Tạo một khoản chi mới và phân loại nó vào một danh mục đã tồn tại.
+- **Kết quả mong đợi**: Hệ thống cần phân loại đúng và hiển thị kết quả phân loại chính xác trong danh sách.
+
+
+#### 3. Kết quả kiểm thử
+
+- **Phát hiện lỗi**: Phát hiện một số lỗi liên quan đến việc không cập nhật dữ liệu ngay lập tức trong một số trường hợp.
+- **Xác nhận tính năng**: Tính năng ghi nhận và phân loại được xác nhận là hoạt động đúng đắn và đáp ứng yêu cầu.
+
+
 
 ## Kết Quả và Đánh Giá
-- **Đạt Được**:
-  (Tổng kết các thành tựu của dự án.)
-- **Hạn Chế**:
-  (Thảo luận về các hạn chế và khó khăn trong dự án.)
-- **Hướng Phát Triển Tương Lai**:
-  (Đề xuất các hướng phát triển tương lai cho dự án.)
-
+- **Đạt Được**: Qua dự án, nhóm đã cơ bản xây dựng thành công một ứng dụng sổ chi tiêu với các chức năng cơ bản đã đề ra.
+- **Hạn Chế**: Do thời gian triển khai có hạn cũng như về kiến thức của từng thành viên chưa đủ nên một số chức năng nâng cao của ứng dụng đã không hoàn thiện hoặc bị loại bỏ.
+- **Hướng Phát Triển Tương Lai**: Nhóm sẽ tiếp tục trau dồi về mặt kiến thức để hoàn thiện thêm về mặt chức năng cũng như giao diện của ứng dụng được tốt hơn.
 ## Phụ Lục
 - **Biểu Đồ**:
   (Các biểu đồ, sơ đồ liên quan.)
-- **Mã Nguồn**:
-  (Tóm tắt hoặc liên kết đến mã nguồn của dự án.)
+- **Mã Nguồn**: https://github.com/dhsoncoder/SoThuChi_63VA/

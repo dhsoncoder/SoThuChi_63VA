@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,17 +12,18 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardviewcolor"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_margin="16dp"
-            app:cardBackgroundColor="#BCBCBC"
-            app:cardCornerRadius="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/rounded_card_background"
+            app:cardCornerRadius="25dp"
             app:cardElevation="4dp">
 
+            <!-- ImageView và các thành phần khác trong CardView -->
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/cake" />
