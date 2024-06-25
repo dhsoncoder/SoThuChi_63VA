@@ -68,6 +68,7 @@
         android:background="@drawable/layout_view">
 
         <!-- Expense and Income Summary -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
