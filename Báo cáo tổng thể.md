@@ -49,9 +49,11 @@
 - **Thiết Kế Giao Diện**:
   -Trang tạo mới: ( trang mở dầu khi vào app )
       - Trang tạo thu nhập mới:
-        ![Tienthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/afc6c6ab-0dbd-435b-a3b3-0878eea0256f)
+
+![Tienthu](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/afc6c6ab-0dbd-435b-a3b3-0878eea0256f)
       - Trang tạo chi tiêu mới:
-        ![TienChi](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/0b897188-a15b-467d-9c86-025f855af03f)
+
+![TienChi](https://github.com/dhsoncoder/SoThuChi_63VA/assets/116859720/0b897188-a15b-467d-9c86-025f855af03f)
 
   - Trang danh sách phân loại:
 
