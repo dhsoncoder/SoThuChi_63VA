@@ -1,0 +1,34 @@
+Index: settings.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>pluginManagement {\r\n    repositories {\r\n        google {\r\n            content {\r\n                includeGroupByRegex(\"com\\\\.android.*\")\r\n                includeGroupByRegex(\"com\\\\.google.*\")\r\n                includeGroupByRegex(\"androidx.*\")\r\n            }\r\n        }\r\n        mavenCentral()\r\n        gradlePluginPortal()\r\n    }\r\n}\r\ndependencyResolutionManagement {\r\n    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\r\n    repositories {\r\n        google()\r\n        mavenCentral()\r\n    }\r\n}\r\n\r\nrootProject.name = \"So thu chi\"\r\ninclude(\":app\")\r\n 
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+--- a/settings.gradle.kts	(revision aa91d3fd620f7f310f8a145f04e7459b5181a5ba)
++++ b/settings.gradle.kts	(date 1719122801203)
+@@ -7,18 +7,19 @@
+                 includeGroupByRegex("androidx.*")
+             }
+         }
+-        mavenCentral()
++        jcenter()
+         gradlePluginPortal()
+     }
+ }
++
+ dependencyResolutionManagement {
+     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+     repositories {
++        maven(url = "https://jitpack.io")
+         google()
+-        mavenCentral()
++        jcenter()
+     }
+ }
+ 
+ rootProject.name = "So thu chi"
+ include(":app")
+- 
+\ No newline at end of file
