@@ -24,6 +24,7 @@ import java.util.Locale;
 public class TienThuFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private GridView gridViewDanhmuc;
+    private DanhmucAdapter adapter;
 
     TextView calendarText;
     ImageView imgLeft, imgRight;
@@ -128,6 +129,11 @@ public class TienThuFragment extends Fragment {
                     edtNote.setText("Trống");
                 }
             }
+        });
+
+        // Set item click listener for GridView
+        gridViewDanhmuc.setOnItemClickListener((parent, view1, position, id) -> {
+            adapter.setSelectedPosition(position);
         });
     }
 }

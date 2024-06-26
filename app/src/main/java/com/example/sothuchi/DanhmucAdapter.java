@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class DanhmucAdapter extends BaseAdapter {
     private Context context;
     private Cursor cursor;
+    private int selectedPosition = -1;
 
     public DanhmucAdapter(Context context, Cursor cursor) {
         this.context = context;
@@ -38,7 +39,7 @@ public class DanhmucAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item_danhmuc, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
         }
 
         cursor.moveToPosition(position);
@@ -52,6 +53,22 @@ public class DanhmucAdapter extends BaseAdapter {
         icon.setImageResource(iconResId);
         name.setText(nameText);
 
+        // Apply a border if the item is selected
+        if (position == selectedPosition) {
+            convertView.setBackgroundResource(R.drawable.selected_item_border);
+        } else {
+            convertView.setBackgroundResource(android.R.color.transparent);
+        }
+
         return convertView;
+    }
+
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
     }
 }
