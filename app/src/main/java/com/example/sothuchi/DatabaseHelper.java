@@ -274,6 +274,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return totalAmount;
     }
+    public Cursor getAllThuchiByYearAndType(int year, int type) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = { COLUMN_MA_DANHMUC_THUCHI, COLUMN_SO_TIEN };
+        String selection = "strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ? AND " + COLUMN_LOAI + " = ?";
+        String[] selectionArgs = { String.valueOf(year), String.valueOf(type) };
+
+        return db.query(TABLE_THUCHI, columns, selection, selectionArgs, null, null, null);
+    }
+    public double getTotalAmountByYear(int year) {
+        double totalAmount = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        String query = "SELECT SUM(" + COLUMN_SO_TIEN + ") FROM " + TABLE_THUCHI +
+                " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ?";
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(year)});
+
+            if (cursor.moveToFirst()) {
+                totalAmount = cursor.getDouble(0);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return totalAmount;
+    }
     public Cursor getAllThuchiByMonthAndType(int year, int month, int loaiDanhMuc) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -314,6 +345,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return totalAmount;
     }
 
+    // Get all records from danhmuc where loai is 1
+    public Cursor getDanhmucByLoai(int loai) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_DANHMUC,
+                null,
+                COLUMN_LOAI + " = ?",
+                new String[]{String.valueOf(loai)},
+                null,
+                null,
+                null);
+    }
     // Get all records from thuchi as a List of Strings
     public List<ThuChi> getThuchiByMonth(int month, int year) {
         List<ThuChi> list = new ArrayList<>();
@@ -337,25 +379,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM ThuChi WHERE ngay_thuchi = ?", new String[]{date});
-
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_THUCHI));
                 double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
                 int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
-                String ngay = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
+                String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
                 String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-
-                ThuChi thuChi = new ThuChi(id, soTien, loai, ngay, ghiChu);
-                thuChiList.add(thuChi);
+                thuChiList.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu));
             } while (cursor.moveToNext());
         }
-
         cursor.close();
-        db.close();
-
         return thuChiList;
-    }
+}
+
     public ThuChi getThuChiById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
