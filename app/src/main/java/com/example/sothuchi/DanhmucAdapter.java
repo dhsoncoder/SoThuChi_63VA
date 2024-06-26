@@ -79,4 +79,7 @@ public class DanhmucAdapter extends BaseAdapter {
             notifyDataSetChanged();
         }
     }
+    public Cursor getCursor() {
+        return cursor;
+    }
 }

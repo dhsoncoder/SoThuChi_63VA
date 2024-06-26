@@ -3,6 +3,7 @@ package com.example.sothuchi;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,11 @@ public class TienThuFragment extends Fragment {
         databaseHelper.insertSampleData();
 
         // Lấy dữ liệu từ database
-        Cursor cursor = databaseHelper.getDanhmucByLoai(0);
+        Cursor cursor = databaseHelper.getDanhmucLoai0();
+
+        // Log cursor count
+        Log.d("TienThuFragment", "onCreateView: Cursor count = " + cursor.getCount());
+
 
         // Tạo adapter và thiết lập cho GridView
         DanhmucAdapter adapter = new DanhmucAdapter(getContext(), cursor);
@@ -64,6 +69,7 @@ public class TienThuFragment extends Fragment {
         imgRight = view.findViewById(R.id.imgRight);
         edtIncome = view.findViewById(R.id.edtIncome);
         edtNote = view.findViewById(R.id.edtNote);
+        btnIncome = view.findViewById(R.id.btnIncome);
 
         // Khởi tạo và thiết lập DatePicker
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
@@ -75,7 +81,6 @@ public class TienThuFragment extends Fragment {
             public void onClick(View V){
                 materialDatePicker .show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
             }
-
         });
 
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
@@ -100,7 +105,6 @@ public class TienThuFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(calendar.getTime());
         calendarText.setText(currentDate);
-
 
         // Xử lí sự kiện cho imgLeft và imgRight
         imgLeft.setOnClickListener(new View.OnClickListener() {
