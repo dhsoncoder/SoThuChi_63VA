@@ -332,4 +332,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return list;
     }
+    public ArrayList<ThuChi> getThuchiByDate(String date) {
+        ArrayList<ThuChi> thuChiList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM ThuChi WHERE ngay_thuchi = ?", new String[]{date});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
+                double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
+                int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
+                String ngay = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
+                String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
+
+                ThuChi thuChi = new ThuChi(id, soTien, loai, ngay, ghiChu);
+                thuChiList.add(thuChi);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return thuChiList;
+    }
 }
