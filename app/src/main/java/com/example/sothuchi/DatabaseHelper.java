@@ -315,10 +315,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Get all records from thuchi as a List of Strings
-    public List<ThuChi> getAllThuchiByString() {
+    public List<ThuChi> getThuchiByMonth(int month, int year) {
         List<ThuChi> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_THUCHI, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_THUCHI + " WHERE strftime('%m', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ? AND strftime('%Y', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ?", new String[]{String.format("%02d", month), String.valueOf(year)});
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
