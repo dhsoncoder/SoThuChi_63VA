@@ -18,9 +18,9 @@ import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
     private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> dataList;
-private  DatabaseHelper databaseHelper;
+    private CustomArrayAdapter adapter;
+    private ArrayList<ThuChi> dataList;
+    private DatabaseHelper databaseHelper;
     private CalendarView calendarView;
 
     @Override
@@ -42,14 +42,12 @@ private  DatabaseHelper databaseHelper;
         databaseHelper.insertThuchi(1, 50000, 1, "2023-03-01", "Tiền lương");
         databaseHelper.insertThuchi(2, 20000, 0, "2023-03-02", "Tiền điện");
         databaseHelper.insertThuchi(3, 15000, 0, "2023-03-03", "Tiền nước");
-
-        dataList = new ArrayList<>(databaseHelper.getAllThuchiAsStringList());
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList);
+        dataList = new ArrayList<>(databaseHelper.getAllThuchiByString());
+        adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, dataList);
         listView.setAdapter(adapter);
-        dataList.clear();
-        dataList.addAll(databaseHelper.getAllThuchiAsStringList());
-        adapter.notifyDataSetChanged();
+
         return view;
 
     }
+
 }

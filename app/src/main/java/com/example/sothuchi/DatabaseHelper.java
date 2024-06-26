@@ -315,16 +315,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Get all records from thuchi as a List of Strings
-    public List<String> getAllThuchiAsStringList() {
-        List<String> list = new ArrayList<>();
+    public List<ThuChi> getAllThuchiByString() {
+        List<ThuChi> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COLUMN_GHICHU + ", " + COLUMN_SO_TIEN + " FROM " + TABLE_THUCHI, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_THUCHI, null);
         if (cursor.moveToFirst()) {
             do {
-                // Concatenate the ghi chu and so tien columns
-                String item = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU)) + " - " +
-                        cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
-                list.add(item);
+                int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
+                double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
+                int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
+                String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
+                String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
+                list.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu));
             } while (cursor.moveToNext());
         }
         cursor.close();
