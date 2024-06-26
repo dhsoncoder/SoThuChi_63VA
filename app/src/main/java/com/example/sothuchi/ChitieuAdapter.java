@@ -20,6 +20,7 @@ public class ChitieuAdapter extends RecyclerView.Adapter<ChitieuAdapter.ViewHold
     private Context mContext;
     private ArrayList<ThuchiItem> mThuchiItems;
 
+
     public ChitieuAdapter(Context context, ArrayList<ThuchiItem> thuchiItems) {
         mContext = context;
         mThuchiItems = thuchiItems;
@@ -38,7 +39,7 @@ public class ChitieuAdapter extends RecyclerView.Adapter<ChitieuAdapter.ViewHold
 
         holder.txttenPL.setText(item.getTenDanhmuc());
         holder.txtphantramPL.setText(String.format("%.0f%%", item.getPhanTram()));
-        holder.txtsoluongPL.setText(String.valueOf(item.getSoLuong()));
+        holder.txtsoluongPL.setText(String.valueOf(""));
         holder.txttienPL.setText(String.format("-%,.0f",item.getSoTien()));
         holder.imgBieuTuong.setImageResource(item.getBieuTuong());
 

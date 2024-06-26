@@ -388,6 +388,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return totalAmount;
     }
+    public int countThuchiByMonthAndType(int year, int month, int loaiDanhMuc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT COUNT(*) FROM " + TABLE_THUCHI +
+                " WHERE strftime('%Y', " + COLUMN_NGAY_THUCHI + ") = ?" +
+                " AND strftime('%m', " + COLUMN_NGAY_THUCHI + ") = ?" +
+                " AND " + COLUMN_LOAI + " = ?";
+
+        String[] selectionArgs = { String.valueOf(year), String.format("%02d", month + 1), String.valueOf(loaiDanhMuc) };
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return count;
+    }
 
 
 

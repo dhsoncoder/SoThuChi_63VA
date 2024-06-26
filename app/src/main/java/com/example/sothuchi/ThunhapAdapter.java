@@ -41,7 +41,7 @@ public class ThunhapAdapter extends RecyclerView.Adapter<ThunhapAdapter.ViewHold
 
         holder.txttenPL.setText(item.getTenDanhmuc());
         holder.txtphantramPL.setText(String.format("%.0f%%", item.getPhanTram()));
-        holder.txtsoluongPL.setText(String.valueOf(item.getSoLuong()));
+        holder.txtsoluongPL.setText(String.valueOf(""));
         holder.txttienPL.setText(String.format("+%,.0f",item.getSoTien()));
         holder.imgBieuTuong.setImageResource(item.getBieuTuong());
 
