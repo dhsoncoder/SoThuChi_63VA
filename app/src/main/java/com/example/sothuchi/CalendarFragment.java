@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ public class CalendarFragment extends Fragment {
     private ArrayList<ThuChi> dataList;
     private DatabaseHelper databaseHelper;
     private MaterialCalendarView calendarView;
+    private SearchView searchView;
+
 
 
 
@@ -42,12 +45,26 @@ public class CalendarFragment extends Fragment {
         tvChiTieu = view.findViewById(R.id.tvChiTieu);
         tvTong = view.findViewById(R.id.tvTong);
         calendarView= view.findViewById(R.id.calendarView);
+        searchView = view.findViewById(R.id.searchbtn);
 
 
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
               resetUI();
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                performSearch(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                performSearch(newText);
+                return true;
             }
         });
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -94,4 +111,16 @@ public void resetUI(){
     tvChiTieu.setText(String.format("%,.0fđ", totalExpense));
     tvTong.setText(String.format("%,.0fđ", total));
 }
+    private void performSearch(String query) {
+        if (dataList != null) {
+            ArrayList<ThuChi> filteredList = new ArrayList<>();
+            for (ThuChi item : dataList) {
+                if (item.getGhiChu().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(item);
+                }
+            }
+            adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, filteredList);
+            listView.setAdapter(adapter);
+        }
+    }
 }
