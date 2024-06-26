@@ -247,15 +247,15 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
     }
 
     private void updateTotalAmounts() {
-        double totalChitieu = databaseHelper.getTotalAmountByYear(currentYear, 0); // Type 0 for expense
-        double totalThunhap = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
+        double totalChitieu = databaseHelper.getTotalAmountByYear(currentYear); // Type 0 for expense
+        double totalThunhap = databaseHelper.getTotalAmountByYear(currentYear); // Type 1 for income
 
         txttongchitieunam.setText(String.format("%+,.0f", totalChitieu));
         txttongthunhapnam.setText(String.format("%+,.0f", totalThunhap));
     }
     private void updatePieChartChitieu() {
         List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 0);
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear);
 
         Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 0);
 
@@ -314,7 +314,7 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
 
     private void updateRecyclerViewChitieu() {
         thuchiItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 0);
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear);
         Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 0);
 
         List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
@@ -367,7 +367,7 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
 
     private void updatePieChartThunhap() {
         List<GroupedThunhapItem> groupedEntries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear); // Type 1 for income
 
         Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 1); // Type 1 for income
 
@@ -428,7 +428,7 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
 
     private void updateRecyclerViewThunhap() {
         thunhapItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear); // Type 1 for income
         Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 1); // Type 1 for income
 
         List<GroupedThunhapItem> groupedEntries = new ArrayList<>();

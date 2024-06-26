@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new CalendarFragment();
 
             } else if (itemId == R.id.trangbaocao) {
-                selectedFragment = new CalendarFragment();
+                selectedFragment = new BaocaoThangFragment();
 
             }
 
