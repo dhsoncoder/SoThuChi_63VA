@@ -1,73 +1,70 @@
 package com.example.sothuchi;
 
-import android.app.DatePickerDialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class TrangBaoCaoActivity extends AppCompatActivity {
-
+public class BaocaoNamFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private ColorStateList def;
-    private TextView txtthang, txtnam, select, txttongchithang, txttongthuthang, txttongthang ;
-    private Button btnchonthang;
+    private TextView txtthang, txtnam, select, txttongchitieunam, txttongthunhapnam;
+    private Button btnchonnam;
     private ImageButton btnlui, btntiep;
+    private NumberPicker yearPicker;
     private TabHost tabHost;
-
     private PieChart pieChartChitieu, pieChartThunhap;
     private RecyclerView recyclerViewChitieu, recyclerViewThunhap ;
     private ChitieuAdapter adapter;
     private ThunhapAdapter adapter2;
     private ArrayList<ThuchiItem> thuchiItems;
     private ArrayList<ThunhapItem> thunhapItems;
-
     private int currentYear;
-    private int currentMonth;
-
     private ScrollView scrollView;
-    private TextView txtsoluongPL;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trang_bao_cao);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        
+        View view = inflater.inflate(R.layout.fragment_baocao_nam, container, false);
+        txttongchitieunam = view.findViewById(R.id.txttongchitieunam);
+        txttongthunhapnam = view.findViewById(R.id.txttongthunhapnam);
+        txtthang = view.findViewById(R.id.txtthang);
+        txtnam = view.findViewById(R.id.txtnam);
+        select = view.findViewById(R.id.select);
+        btnchonnam = view.findViewById(R.id.btnchonnam);
+        btnlui = view.findViewById(R.id.btnlui);
+        btntiep = view.findViewById(R.id.btntiep);
 
-        txtthang = findViewById(R.id.txtthang);
-        txtnam = findViewById(R.id.txtnam);
-        select = findViewById(R.id.select);
-        btnchonthang = findViewById(R.id.btnchonthang);
-        btnlui = findViewById(R.id.btnlui);
-        btntiep = findViewById(R.id.btntiep);
-        txttongchithang = findViewById(R.id.txttongchithang);
-        txttongthuthang = findViewById(R.id.txttongthuthang);
-        txttongthang = findViewById(R.id.txttongthang);
-        txtsoluongPL = findViewById(R.id.txtsoluongPL);
-        scrollView = findViewById(R.id.scrollView);
+        scrollView = view.findViewById(R.id.scrollView);
 
         // Add code to scroll to top when activity starts
         scrollView.post(new Runnable() {
@@ -77,7 +74,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
             }
         });
 
-        tabHost = findViewById(R.id.tabhost);
+        tabHost = view.findViewById(R.id.Tabhost2);
         tabHost.setup();
 
         // Create tab Chi tiêu
@@ -92,6 +89,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         tabtn.setIndicator("Thu nhập");
         tabHost.addTab(tabtn);
 
+        // Set up listener for tab changes
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
@@ -104,25 +102,32 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 });
             }
         });
-
         // Store the default text color
         def = txtnam.getTextColors();
 
-        // Initialize the database helper
-        databaseHelper = new DatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(getActivity());
 
-        // Initialize current month and year to current system date
+        // Initialize current year to current system date
         final Calendar calendar = Calendar.getInstance();
         currentYear = calendar.get(Calendar.YEAR);
-        currentMonth = calendar.get(Calendar.MONTH);
 
-        // Set up click listeners
+        // Set initial year on btnchonnam button
+        updateYearText();
+
+        // Set click listeners
         txtthang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 select.animate().x(0).setDuration(100);
                 txtthang.setTextColor(Color.WHITE);
                 txtnam.setTextColor(def);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                BaocaoThangFragment BaocaoThangFragment = new BaocaoThangFragment();
+                fragmentTransaction.replace(R.id.frame_container, BaocaoThangFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
@@ -132,91 +137,114 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 select.animate().x(txtnam.getWidth()).setDuration(100);
                 txtthang.setTextColor(def);
                 txtnam.setTextColor(Color.WHITE);
-
-                Intent intent = new Intent(TrangBaoCaoActivity.this, TrangBaoCaoNamActivity.class);
-                startActivity(intent);
             }
         });
 
-        btnchonthang.setOnClickListener(new View.OnClickListener() {
+        btnchonnam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDatePicker();
+                showYearPickerDialog();
             }
         });
 
         btnlui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentMonth == 0) { // If current month is January (0 index)
-                    currentMonth = 11; // Set to December
-                    currentYear--; // Move to previous year
-                } else {
-                    currentMonth--; // Decrease month by 1
-                }
-                updateMonthText();
-                updateUI(); // Update UI based on new selected month
+                currentYear--; // Move to previous year
+                updateYearText();
+                updateUI(); // Update UI based on new selected year
             }
         });
 
         btntiep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentMonth == 11) { // If current month is December
-                    currentMonth = 0; // Set to January
-                    currentYear++; // Move to next year
-                } else {
-                    currentMonth++; // Increase month by 1
-                }
-                updateMonthText();
-                updateUI(); // Update UI based on new selected month
+                currentYear++; // Move to next year
+                updateYearText();
+                updateUI(); // Update UI based on new selected year
             }
         });
 
         // Initialize views
-        pieChartChitieu = findViewById(R.id.chartchitieu);
-        recyclerViewChitieu = findViewById(R.id.recyclerviewchitieu);
-        recyclerViewChitieu.setLayoutManager(new LinearLayoutManager(this));
+        pieChartChitieu = view.findViewById(R.id.chartchitieu);
+        recyclerViewChitieu = view.findViewById(R.id.recyclerviewchitieu);
+        recyclerViewChitieu.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        pieChartThunhap = findViewById(R.id.chartthunhap);
-        recyclerViewThunhap = findViewById(R.id.recyclerviewthunhap);
-        recyclerViewThunhap.setLayoutManager(new LinearLayoutManager(this));
+        pieChartThunhap = view.findViewById(R.id.chartthunhap);
+        recyclerViewThunhap = view.findViewById(R.id.recyclerviewthunhap);
+        recyclerViewThunhap.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Initialize ArrayList and Adapter
         thuchiItems = new ArrayList<>();
         thunhapItems = new ArrayList<>();
-        adapter2 = new ThunhapAdapter(this, thunhapItems);
-        adapter = new ChitieuAdapter(this, thuchiItems);
+        adapter2 = new ThunhapAdapter(getActivity(), thunhapItems);
+        adapter = new ChitieuAdapter(getActivity(), thuchiItems);
         recyclerViewChitieu.setAdapter(adapter);
         recyclerViewThunhap.setAdapter(adapter2);
 
         // Update UI components
-        updateMonthText(); // Update the initial text of btnchonthang
+        updateYearText(); // Update the initial text of btnchonthang
         updateUI(); // Update UI based on initial selected month
+
+        return view;
+
     }
 
-    private void updateMonthText() {
-        String selectedDate = "Tháng " + (currentMonth + 1) + " Năm " + currentYear;
-        btnchonthang.setText(selectedDate);
+    private void updateYearText() {
+        String selectedDate = "Năm " + currentYear;
+        btnchonnam.setText(selectedDate);
+    }
+
+    private void showYearPickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Chọn năm");
+
+        yearPicker = new NumberPicker(getActivity());
+        int yearRangeStart = 1900; // Change this if you want to adjust the start of the range
+        int yearRangeEnd = 2100;   // Change this if you want to adjust the end of the range
+        String[] displayValues = generateYears(yearRangeStart, yearRangeEnd);
+        yearPicker.setMinValue(0);
+        yearPicker.setMaxValue(displayValues.length - 1);
+        yearPicker.setWrapSelectorWheel(false);
+        yearPicker.setDisplayedValues(displayValues);
+        yearPicker.setValue(currentYear - yearRangeStart); // Set initial value to current year
+
+        builder.setView(yearPicker);
+
+        builder.setPositiveButton("Chọn", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                currentYear = yearPicker.getValue() + yearRangeStart;
+                updateYearText();
+                updateUI(); // Update UI based on new selected year
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User cancelled the dialog
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private String[] generateYears(int startYear, int endYear) {
+        int numYears = endYear - startYear + 1;
+        String[] years = new String[numYears];
+        for (int i = 0; i < numYears; i++) {
+            years[i] = String.valueOf(startYear + i);
+        }
+        return years;
     }
 
     private void updateUI() {
         updateTabChiTieu(); // Update Chi tiêu tab
         updateTabThuNhap(); // Update Thu nhập tab
-
-        // Calculate and set total expenses
-        double totalExpense = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
-        txttongchithang.setText(String.format("-%,.0f", totalExpense));
-
-        // Calculate and set total income
-        double totalIncome = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1);
-        txttongthuthang.setText(String.format("+%,.0f", totalIncome));
-
-        // Calculate and set net income
-        double netIncome = totalIncome - totalExpense;
-        txttongthang.setText(String.format("%+,.0f", netIncome));
+        updateTotalAmounts();
     }
-
     private void updateTabChiTieu() {
         updatePieChartChitieu();
         updateRecyclerViewChitieu();
@@ -227,11 +255,18 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         updateRecyclerViewThunhap();
     }
 
+    private void updateTotalAmounts() {
+        double totalChitieu = databaseHelper.getTotalAmountByYear(currentYear, 0); // Type 0 for expense
+        double totalThunhap = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
+
+        txttongchitieunam.setText(String.format("%+,.0f", totalChitieu));
+        txttongthunhapnam.setText(String.format("%+,.0f", totalThunhap));
+    }
     private void updatePieChartChitieu() {
         List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 0);
 
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
+        Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 0);
 
         if (cursor.moveToFirst()) {
             do {
@@ -288,8 +323,8 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
     private void updateRecyclerViewChitieu() {
         thuchiItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 0);
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 0);
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 0);
+        Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 0);
 
         List<GroupedThuchiItem> groupedEntries = new ArrayList<>();
 
@@ -332,7 +367,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
         // Hiển thị thông báo nếu không có dữ liệu cho tháng được chọn
         if (thuchiItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Không có dữ liệu cho năm này", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -341,9 +376,9 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
     private void updatePieChartThunhap() {
         List<GroupedThunhapItem> groupedEntries = new ArrayList<>();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1); // Type 1 for income
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
 
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1); // Type 1 for income
+        Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 1); // Type 1 for income
 
         if (cursor.moveToFirst()) {
             do {
@@ -402,8 +437,8 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
     private void updateRecyclerViewThunhap() {
         thunhapItems.clear();
-        double totalAmount = databaseHelper.getTotalAmountByMonth(currentYear, currentMonth, 1); // Type 1 for income
-        Cursor cursor = databaseHelper.getAllThuchiByMonthAndType(currentYear, currentMonth, 1); // Type 1 for income
+        double totalAmount = databaseHelper.getTotalAmountByYear(currentYear, 1); // Type 1 for income
+        Cursor cursor = databaseHelper.getAllThuchiByYearAndType(currentYear, 1); // Type 1 for income
 
         List<GroupedThunhapItem> groupedEntries = new ArrayList<>();
 
@@ -446,29 +481,8 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
         // Show a message if no data is available for the selected month
         if (thunhapItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Không có dữ liệu cho năm này", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void showDatePicker() {
-        int year = currentYear;
-        int month = currentMonth;
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                TrangBaoCaoActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        currentYear = year;
-                        currentMonth = monthOfYear;
-                        updateMonthText();
-                        updateUI(); // Update UI based on new selected month
-                    }
-                }, year, month, 1); // Day is set to 1 (arbitrary as we only care about month and year)
-
-        datePickerDialog.show();
-    }
-
-
-
 }
+
