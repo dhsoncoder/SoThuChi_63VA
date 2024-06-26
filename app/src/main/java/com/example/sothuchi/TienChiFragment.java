@@ -1,11 +1,14 @@
 package com.example.sothuchi;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +22,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+
 public class TienChiFragment extends Fragment {
+    private DatabaseHelper databaseHelper;
+    private GridView gridViewDanhmuc;
+
 
     TextView calendarText;
     ImageView imgLeft, imgRight;
@@ -28,7 +35,18 @@ public class TienChiFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tienchi, container, false);
+        View view = inflater.inflate(R.layout.fragment_tienchi, container, false);
+        gridViewDanhmuc = view.findViewById(R.id.gridViewDanhmuc);
+        databaseHelper = new DatabaseHelper(getContext());
+
+        // Lấy dữ liệu từ database
+        Cursor cursor = databaseHelper.getDanhmucByLoai(1);
+
+        // Tạo adapter và thiết lập cho GridView
+        DanhmucAdapter adapter = new DanhmucAdapter(getContext(), cursor);
+        gridViewDanhmuc.setAdapter(adapter);
+
+        return view;
     }
 
     @Override
@@ -42,15 +60,14 @@ public class TienChiFragment extends Fragment {
         edtNote = view.findViewById(R.id.edtNote);
 
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select a date");
+        builder.setTitleText("Chọn ngày");
         final MaterialDatePicker materialDatePicker = builder.build();
 
         calendarText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V){
-                materialDatePicker .show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
+                materialDatePicker.show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
             }
-
         });
 
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
@@ -65,7 +82,6 @@ public class TienChiFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(calendar.getTime());
         calendarText.setText(currentDate);
-
 
         // Set onClick listeners for imgLeft and imgRight
         imgLeft.setOnClickListener(new View.OnClickListener() {
@@ -106,13 +122,12 @@ public class TienChiFragment extends Fragment {
         edtNote.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && edtNote.getText().toString().equals("Not entered")) {
+                if (hasFocus && edtNote.getText().toString().equals("Trống")) {
                     edtNote.setText("");
                 } else if (!hasFocus && edtNote.getText().toString().isEmpty()) {
-                    edtNote.setText("Not entered");
+                    edtNote.setText("Trống");
                 }
             }
         });
-        //
     }
 }

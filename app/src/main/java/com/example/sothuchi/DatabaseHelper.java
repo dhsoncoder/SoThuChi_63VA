@@ -27,6 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NGAY_THUCHI = "ngay_thuchi";
     public static final String COLUMN_GHICHU = "ghichu";
 
+
+
     // SQL create table statements
     private static final String CREATE_TABLE_DANHMUC =
             "CREATE TABLE " + TABLE_DANHMUC + " (" +
@@ -55,6 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_DANHMUC);
         db.execSQL(CREATE_TABLE_THUCHI);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -311,5 +314,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return totalAmount;
     }
 
+    // Get all records from danhmuc where loai is 1
+    public Cursor getDanhmucByLoai(int loai) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_DANHMUC,
+                null,
+                COLUMN_LOAI + " = ?",
+                new String[]{String.valueOf(loai)},
+                null,
+                null,
+                null);
+    }
 
 }
