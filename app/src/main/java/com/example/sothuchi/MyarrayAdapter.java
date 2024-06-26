@@ -25,8 +25,7 @@ public class MyarrayAdapter extends ArrayAdapter<Image> {
         convertView = inflater.inflate(LayoutId, null);
         final Image myimage = myArray.get(position);
 //dòng lệnh lấy ImageView ra để hiển thị hình ảnh
-        final ImageView imgitem =
-                (ImageView)convertView.findViewById(R.id.imageView2);
+        final ImageView imgitem = (ImageView)convertView.findViewById(R.id.imageView2);
         imgitem.setImageResource(myimage.getImg());
         return convertView;
     }

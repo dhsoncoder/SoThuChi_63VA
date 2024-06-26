@@ -1,8 +1,13 @@
 package com.example.sothuchi;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -62,4 +67,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Get all DanhMuc by Loai
+    public List<DanhMuc> getAllDanhMucByLoai(int loai) {
+        List<DanhMuc> danhMucList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {
+                COLUMN_MA_DANHMUC,
+                COLUMN_TEN_DANHMUC,
+                COLUMN_BIEUTUONG,
+                COLUMN_MAUSAC
+        };
+        String selection = COLUMN_LOAI + " = ?";
+        String[] selectionArgs = { String.valueOf(loai) };
+
+        Cursor cursor = db.query(TABLE_DANHMUC, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int maDanhMuc = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MA_DANHMUC));
+                String tenDanhMuc = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEN_DANHMUC));
+                int bieuTuong = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BIEUTUONG));
+                String mauSac = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAUSAC));
+
+                // Kiểm tra xem danh mục này đã có trong danh sách chưa
+                boolean exists = false;
+                for (DanhMuc danhMuc : danhMucList) {
+                    if (danhMuc.getTenDanhMuc().equals(tenDanhMuc) &&
+                            danhMuc.getBieuTuong() == bieuTuong &&
+                            danhMuc.getMauSac().equals(mauSac)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                // Nếu chưa tồn tại, thêm vào danh sách
+                if (!exists) {
+                    DanhMuc danhMuc = new DanhMuc();
+                    danhMuc.setMaDanhMuc(maDanhMuc);
+                    danhMuc.setTenDanhMuc(tenDanhMuc);
+                    danhMuc.setBieuTuong(bieuTuong);
+                    danhMuc.setMauSac(mauSac);
+
+                    danhMucList.add(danhMuc);
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return danhMucList;
+    }
+
+    // Delete a DanhMuc by ID
+    public void deleteDanhMuc(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Xác nhận xóa trước khi thực hiện
+        try {
+            db.beginTransaction();
+            // Thực hiện xóa
+            db.delete(TABLE_DANHMUC, COLUMN_MA_DANHMUC + " = ?", new String[]{String.valueOf(id)});
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
 }
