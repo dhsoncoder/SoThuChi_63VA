@@ -148,7 +148,7 @@ public class EditExpenses extends AppCompatActivity {
                 double newIncome = Double.parseDouble(edtIncome.getText().toString().replace("đ", "").replace(",", ""));
 
                 // Update the ThuChi item in the database
-                databaseHelper.updateThuchi(itemId,item.getIdDanhMuc(), newIncome, 1, newDate, newNote);
+                databaseHelper.updateThuchi(itemId,item.getIdDanhMuc(), newIncome, 0, newDate, newNote);
 
                 // Finish the activity
                 finish();

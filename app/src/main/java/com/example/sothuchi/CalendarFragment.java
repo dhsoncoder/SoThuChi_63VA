@@ -106,6 +106,13 @@ public class CalendarFragment extends Fragment {
                     // Pass any extra data if needed
                     intent.putExtra("item_id", item.getId());
                     startActivity(intent);
+                }else {
+                    // Start EditExpenseActivity
+                    Intent intent = new Intent(getActivity(), EditExpenses.class);
+                    // Pass any extra data if needed
+                    intent.putExtra("item_id", item.getId());
+                    startActivity(intent);
+
                 }
             }
         });

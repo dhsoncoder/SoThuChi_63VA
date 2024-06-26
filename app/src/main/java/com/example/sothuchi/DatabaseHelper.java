@@ -362,11 +362,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<ThuChi> getThuchiByMonth(int month, int year) {
         List<ThuChi> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_THUCHI + " WHERE strftime('%m', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ? AND strftime('%Y', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ?", new String[]{String.format("%02d", month), String.valueOf(year)});
+        Cursor cursor = db.rawQuery("SELECT *, CASE WHEN " + COLUMN_LOAI + " = 0 THEN -" + COLUMN_SO_TIEN + " ELSE " + COLUMN_SO_TIEN + " END AS adjusted_so_tien FROM " + TABLE_THUCHI + " WHERE strftime('%m', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ? AND strftime('%Y', substr(" + COLUMN_NGAY_THUCHI + ", 7, 4) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 4, 2) || '-' || substr(" + COLUMN_NGAY_THUCHI + ", 1, 2)) = ?", new String[]{String.format("%02d", month), String.valueOf(year)});
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_THUCHI));
-                double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
+                double soTien = cursor.getDouble(cursor.getColumnIndex("adjusted_so_tien"));
                 int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
                 String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
                 String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
@@ -377,15 +377,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return list;
     }
+
     public ArrayList<ThuChi> getThuchiByDate(String date) {
         ArrayList<ThuChi> thuChiList = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM ThuChi WHERE ngay_thuchi = ?", new String[]{date});
+        Cursor cursor = db.rawQuery("SELECT *, CASE WHEN " + COLUMN_LOAI + " = 0 THEN -" + COLUMN_SO_TIEN + " ELSE " + COLUMN_SO_TIEN + " END AS adjusted_so_tien FROM " + TABLE_THUCHI + " WHERE " + COLUMN_NGAY_THUCHI + " = ?", new String[]{date});
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_THUCHI));
-                double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
+                double soTien = cursor.getDouble(cursor.getColumnIndex("adjusted_so_tien"));
                 int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
                 String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
                 String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
@@ -395,7 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return thuChiList;
-}
+    }
 
     public ThuChi getThuChiById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
