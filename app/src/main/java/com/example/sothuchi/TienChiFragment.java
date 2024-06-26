@@ -3,6 +3,7 @@ package com.example.sothuchi;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,14 @@ public class TienChiFragment extends Fragment {
         gridViewDanhmuc = view.findViewById(R.id.gridViewDanhmuc);
         databaseHelper = new DatabaseHelper(getContext());
 
+        // Thêm dữ liệu mẫu
+        databaseHelper.insertSampleData();
+
         // Lấy dữ liệu từ database
         Cursor cursor = databaseHelper.getDanhmucByLoai(1);
+
+        // Log cursor count
+        Log.d("TienChiFragment", "onCreateView: Cursor count = " + cursor.getCount());
 
         // Tạo adapter và thiết lập cho GridView
         adapter = new DanhmucAdapter(getContext(), cursor);
@@ -97,7 +104,7 @@ public class TienChiFragment extends Fragment {
         String currentDate = dateFormat.format(calendar.getTime());
         calendarText.setText(currentDate);
 
-        // Set onClick listeners for imgLeft and imgRight
+        // Xử lí sự kiện cho imgLeft và imgRight
         imgLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

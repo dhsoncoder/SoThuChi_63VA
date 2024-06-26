@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -314,16 +315,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return totalAmount;
     }
 
-    // Get all records from danhmuc where loai is 1
+
+    public void insertSampleData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Clear existing data
+        db.delete(TABLE_DANHMUC, null, null);
+        db.delete(TABLE_THUCHI, null, null);
+
+        // Insert sample categories (danhmuc)
+        long result1 = insertDanhmuc("Ăn uống", 1, R.drawable.ic_food, "#FF0000");
+        long result2 = insertDanhmuc("Giải trí", 1, R.drawable.ic_next, "#00FF00");
+        long result3 = insertDanhmuc("Y tế", 1, R.drawable.ic_calendar, "#0000FF");
+        long result4 = insertDanhmuc("Tiền lương", 1, R.drawable.ic_food, "#FF0000");
+        long result5 = insertDanhmuc("Làm thêm", 1, R.drawable.ic_next, "#00FF00");
+        long result6 = insertDanhmuc("Thưởng", 1, R.drawable.ic_calendar, "#0000FF");
+
+        // Log the result to check if data is inserted correctly
+        Log.d("DatabaseHelper", "insertSampleData: " + result1 + ", " + result2 + ", " + result3 + ", " + result4 + ", " + result5 + ", " + result6);
+
+        // Insert sample expenses (thuchi)
+        insertThuchi(1, 100000, 1, "26/06/2024", "Ăn uống");
+        insertThuchi(2, 150000, 1, "25/06/2024", "Xem phim");
+        insertThuchi(3, 200000, 1, "24/06/2024", "Thuốc");
+        insertThuchi(4, 100000, 0, "26/06/2024", "Tiền lương");
+        insertThuchi(5, 150000, 0, "25/06/2024", "Làm thêm");
+        insertThuchi(6, 200000, 0, "24/06/2024", "Thưởng");
+    }
+
+    // Get all records from danhmuc where loai =
     public Cursor getDanhmucByLoai(int loai) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_DANHMUC,
+        Cursor cursor = db.query(TABLE_DANHMUC,
                 null,
                 COLUMN_LOAI + " = ?",
                 new String[]{String.valueOf(loai)},
                 null,
                 null,
                 null);
+
+        // Log the cursor count
+        Log.d("DatabaseHelper", "getDanhmucByLoai: Cursor count = " + cursor.getCount());
+
+        return cursor;
     }
 
 }

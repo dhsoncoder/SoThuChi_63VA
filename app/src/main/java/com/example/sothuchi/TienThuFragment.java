@@ -2,13 +2,16 @@ package com.example.sothuchi;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +22,8 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Date;
+import java.util.Locale;
 
 public class TienThuFragment extends Fragment {
     private DatabaseHelper databaseHelper;
@@ -30,6 +33,7 @@ public class TienThuFragment extends Fragment {
     TextView calendarText;
     ImageView imgLeft, imgRight;
     EditText edtIncome, edtNote;
+    Button btnIncome;
 
     @Nullable
     @Override
@@ -37,6 +41,9 @@ public class TienThuFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tienthu, container, false);
         gridViewDanhmuc = view.findViewById(R.id.gridViewDanhmuc);
         databaseHelper = new DatabaseHelper(getContext());
+
+        // Thêm dữ liệu mẫu
+        databaseHelper.insertSampleData();
 
         // Lấy dữ liệu từ database
         Cursor cursor = databaseHelper.getDanhmucByLoai(0);
@@ -145,6 +152,42 @@ public class TienThuFragment extends Fragment {
         // Set item click listener for GridView
         gridViewDanhmuc.setOnItemClickListener((parent, view1, position, id) -> {
             adapter.setSelectedPosition(position);
+        });
+
+        // Set onClick listener for btnExpense
+        btnIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedDate = calendarText.getText().toString();
+                String expenseText = btnIncome.getText().toString();
+                String noteText = edtNote.getText().toString();
+                int selectedPosition = adapter.getSelectedPosition();
+
+                if (selectedPosition == -1) {
+                    Toast.makeText(getContext(), "Vui lòng chọn danh mục", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(selectedDate) || TextUtils.isEmpty(expenseText) || "0.00".equals(expenseText)) {
+                    Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int maDanhmuc = (int) adapter.getItemId(selectedPosition);
+                double soTien = Double.parseDouble(expenseText);
+
+                // Lưu dữ liệu vào cơ sở dữ liệu
+                long result = databaseHelper.insertThuchi(maDanhmuc, soTien, 1, selectedDate, noteText);
+                if (result != -1) {
+                    Toast.makeText(getContext(), "Thêm khoản chi thành công", Toast.LENGTH_SHORT).show();
+                    // Xóa dữ liệu sau khi lưu thành công
+                    btnIncome.setText("0.00");
+                    edtNote.setText("Trống");
+                    adapter.setSelectedPosition(-1);
+                } else {
+                    Toast.makeText(getContext(), "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 }
