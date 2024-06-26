@@ -6,8 +6,15 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import java.util.Calendar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -16,21 +23,15 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class TrangBaoCaoActivity extends AppCompatActivity {
+public class BaocaoThangFragment extends Fragment {
 
     private DatabaseHelper databaseHelper;
     private ColorStateList def;
@@ -53,21 +54,22 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
     private TextView txtsoluongPL;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trang_bao_cao);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_baocao_thang, container, false);
 
-        txtthang = findViewById(R.id.txtthang);
-        txtnam = findViewById(R.id.txtnam);
-        select = findViewById(R.id.select);
-        btnchonthang = findViewById(R.id.btnchonthang);
-        btnlui = findViewById(R.id.btnlui);
-        btntiep = findViewById(R.id.btntiep);
-        txttongchithang = findViewById(R.id.txttongchithang);
-        txttongthuthang = findViewById(R.id.txttongthuthang);
-        txttongthang = findViewById(R.id.txttongthang);
-        txtsoluongPL = findViewById(R.id.txtsoluongPL);
-        scrollView = findViewById(R.id.scrollView);
+        txtthang = view.findViewById(R.id.txtthang);
+        txtnam = view.findViewById(R.id.txtnam);
+        select = view.findViewById(R.id.select);
+        btnchonthang = view.findViewById(R.id.btnchonthang);
+        btnlui = view.findViewById(R.id.btnlui);
+        btntiep = view.findViewById(R.id.btntiep);
+        txttongchithang = view.findViewById(R.id.txttongchithang);
+        txttongthuthang = view.findViewById(R.id.txttongthuthang);
+        txttongthang = view.findViewById(R.id.txttongthang);
+        txtsoluongPL = view.findViewById(R.id.txtsoluongPL);
+        scrollView = view.findViewById(R.id.scrollView);
 
         // Add code to scroll to top when activity starts
         scrollView.post(new Runnable() {
@@ -77,7 +79,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
             }
         });
 
-        tabHost = findViewById(R.id.tabhost);
+        tabHost = view.findViewById(R.id.tabhost);
         tabHost.setup();
 
         // Create tab Chi tiêu
@@ -109,7 +111,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         def = txtnam.getTextColors();
 
         // Initialize the database helper
-        databaseHelper = new DatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(getActivity());
 
         // Initialize current month and year to current system date
         final Calendar calendar = Calendar.getInstance();
@@ -133,7 +135,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
                 txtthang.setTextColor(def);
                 txtnam.setTextColor(Color.WHITE);
 
-                Intent intent = new Intent(TrangBaoCaoActivity.this, TrangBaoCaoNamActivity.class);
+                Intent intent = new Intent(getActivity(), TrangBaoCaoNamActivity.class);
                 startActivity(intent);
             }
         });
@@ -174,25 +176,27 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         });
 
         // Initialize views
-        pieChartChitieu = findViewById(R.id.chartchitieu);
-        recyclerViewChitieu = findViewById(R.id.recyclerviewchitieu);
-        recyclerViewChitieu.setLayoutManager(new LinearLayoutManager(this));
+        pieChartChitieu = view.findViewById(R.id.chartchitieu);
+        recyclerViewChitieu = view.findViewById(R.id.recyclerviewchitieu);
+        recyclerViewChitieu.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        pieChartThunhap = findViewById(R.id.chartthunhap);
-        recyclerViewThunhap = findViewById(R.id.recyclerviewthunhap);
-        recyclerViewThunhap.setLayoutManager(new LinearLayoutManager(this));
+        pieChartThunhap = view.findViewById(R.id.chartthunhap);
+        recyclerViewThunhap = view.findViewById(R.id.recyclerviewthunhap);
+        recyclerViewThunhap.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Initialize ArrayList and Adapter
         thuchiItems = new ArrayList<>();
         thunhapItems = new ArrayList<>();
-        adapter2 = new ThunhapAdapter(this, thunhapItems);
-        adapter = new ChitieuAdapter(this, thuchiItems);
+        adapter2 = new ThunhapAdapter(getActivity(), thunhapItems);
+        adapter = new ChitieuAdapter(getActivity(), thuchiItems);
         recyclerViewChitieu.setAdapter(adapter);
         recyclerViewThunhap.setAdapter(adapter2);
 
         // Update UI components
         updateMonthText(); // Update the initial text of btnchonthang
         updateUI(); // Update UI based on initial selected month
+
+        return view;
     }
 
     private void updateMonthText() {
@@ -332,7 +336,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
         // Hiển thị thông báo nếu không có dữ liệu cho tháng được chọn
         if (thuchiItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -446,7 +450,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
         // Show a message if no data is available for the selected month
         if (thunhapItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -455,7 +459,7 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
         int month = currentMonth;
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                TrangBaoCaoActivity.this,
+                getActivity(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -468,7 +472,6 @@ public class TrangBaoCaoActivity extends AppCompatActivity {
 
         datePickerDialog.show();
     }
-
 
 
 }

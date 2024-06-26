@@ -40,9 +40,9 @@ public class ThunhapAdapter extends RecyclerView.Adapter<ThunhapAdapter.ViewHold
         ThunhapItem item = mThunhapItems.get(position);
 
         holder.txttenPL.setText(item.getTenDanhmuc());
-        holder.txtphantramPL.setText(String.format("%.2f%%", item.getPhanTram()));
+        holder.txtphantramPL.setText(String.format("%.0f%%", item.getPhanTram()));
         holder.txtsoluongPL.setText(String.valueOf(item.getSoLuong()));
-        holder.txttienPL.setText(String.valueOf(item.getSoTien()));
+        holder.txttienPL.setText(String.format("+%,.0f",item.getSoTien()));
         holder.imgBieuTuong.setImageResource(item.getBieuTuong());
 
         try {

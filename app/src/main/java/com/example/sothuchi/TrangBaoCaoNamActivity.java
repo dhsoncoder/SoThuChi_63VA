@@ -358,7 +358,7 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
 
         // Hiển thị thông báo nếu không có dữ liệu cho tháng được chọn
         if (thuchiItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không có dữ liệu cho năm này", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -472,7 +472,7 @@ public class TrangBaoCaoNamActivity extends AppCompatActivity {
 
         // Show a message if no data is available for the selected month
         if (thunhapItems.isEmpty()) {
-            Toast.makeText(this, "Không có dữ liệu cho tháng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không có dữ liệu cho năm này", Toast.LENGTH_SHORT).show();
         }
     }
 }
