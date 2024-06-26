@@ -1,5 +1,6 @@
 package com.example.sothuchi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
             } else if (itemId == R.id.trangbaocao) {
                 selectedFragment = new BaocaoThangFragment();
+
+            } else if (itemId == R.id.trangphanloai) {
+                Intent intent = new Intent(this, PLChitieuMoiActivity.class);
+
+                startActivity(intent);
 
             }
 
