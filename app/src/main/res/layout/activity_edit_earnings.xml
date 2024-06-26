@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -83,7 +84,7 @@
             android:layout_weight="1"
             android:background="@drawable/rounded_corner"
             android:padding="6dp"
-            android:text="0.00"
+
             android:textSize="20sp"
             android:inputType="numberDecimal"/>
 
@@ -147,6 +148,6 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#69C0FF"
         android:padding="13dp"
-        android:text="Nhập khoản thu"
+        android:text="Sửa khoản thu"
         android:textSize="18sp" />
 </LinearLayout>

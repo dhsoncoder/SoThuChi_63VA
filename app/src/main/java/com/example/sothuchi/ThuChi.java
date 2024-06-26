@@ -31,6 +31,15 @@ public class ThuChi {
         return ngayThang;
     }
 
+    @Override
+    public String toString() {
+        return "ThuChi{" +
+                "id=" + id +
+                ", soTien=" + soTien +
+                ", ghiChu='" + ghiChu + '\'' +
+                '}';
+    }
+
     public String getGhiChu() {
         return ghiChu;
     }

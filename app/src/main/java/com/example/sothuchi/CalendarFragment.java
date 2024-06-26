@@ -1,13 +1,17 @@
 package com.example.sothuchi;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
@@ -33,6 +37,8 @@ public class CalendarFragment extends Fragment {
     private MaterialCalendarView calendarView;
     private SearchView searchView;
 
+    private ThuChiViewModel viewModel;
+
 
 
 
@@ -46,8 +52,19 @@ public class CalendarFragment extends Fragment {
         tvTong = view.findViewById(R.id.tvTong);
         calendarView= view.findViewById(R.id.calendarView);
         searchView = view.findViewById(R.id.searchbtn);
+        listView = view.findViewById(R.id.lv_lich);
 
+        // Initialize the ViewModel
+        viewModel = new ViewModelProvider(this).get(ThuChiViewModel.class);
 
+        // Observe the LiveData
+        viewModel.getThuChiList().observe(getViewLifecycleOwner(), new Observer<ArrayList<ThuChi>>() {
+            @Override
+            public void onChanged(ArrayList<ThuChi> thuChis) {
+                // Update the UI
+                resetUI();
+            }
+        });
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
@@ -72,15 +89,31 @@ public class CalendarFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 String dateString = String.format("%02d/%02d/%04d", date.getDay(), date.getMonth(), date.getYear());
                 dataList = new ArrayList<>(databaseHelper.getThuchiByDate(dateString));
-                adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, dataList);
+                adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, dataList,viewModel);
                 listView.setAdapter(adapter);
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the clicked item
+                ThuChi item = (ThuChi) parent.getItemAtPosition(position);
+
+                // Check if the type is 1
+                if (item.getLoai() == 1) {
+                    // Start EditEarningsActivity
+                    Intent intent = new Intent(getActivity(), EditEarnings.class);
+                    // Pass any extra data if needed
+                    intent.putExtra("item_id", item.getId());
+                    startActivity(intent);
+                }
             }
         });
         listView = view.findViewById(R.id.lv_lich); // Replace with your ListView's ID
         databaseHelper = new DatabaseHelper(getContext());
 
         databaseHelper.insertThuchi(1, 0, 1, "20/06/2024", "Tiền lương");
-        databaseHelper.insertThuchi(2, 20000, 0, "23/06/2024", "Tiền điện");
+        databaseHelper.insertThuchi(2, 20000, 1, "23/06/2024", "Tiền điện");
         databaseHelper.insertThuchi(3, 15000, 0, "2023-03-03", "Tiền nước");
 
       resetUI();
@@ -91,7 +124,7 @@ public class CalendarFragment extends Fragment {
 public void resetUI(){
     // Query data for the selected month and year
     dataList = new ArrayList<>(databaseHelper.getThuchiByMonth(calendarView.getCurrentDate().getMonth() , calendarView.getCurrentDate().getYear()));
-    adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, dataList);
+    adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, dataList,viewModel);
     listView.setAdapter(adapter);
 
 
@@ -119,8 +152,9 @@ public void resetUI(){
                     filteredList.add(item);
                 }
             }
-            adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, filteredList);
+            adapter = new CustomArrayAdapter(getActivity(), R.layout.item_thu_chi, filteredList,viewModel);
             listView.setAdapter(adapter);
         }
     }
+
 }

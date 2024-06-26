@@ -42,4 +42,6 @@ dependencies {
     implementation ("com.google.android.material:material:1.6.0")
     implementation ("com.github.prolificinteractive:material-calendarview:2.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("com.daimajia.swipelayout:library:1.2.0@aar")
+    implementation ("com.nineoldandroids:library:2.4.0")
 }

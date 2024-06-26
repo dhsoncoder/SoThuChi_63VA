@@ -27,7 +27,8 @@
         <activity
             android:name=".TrangBaoCaoActivity"
             android:exported="true"/>
-
+        <activity android:name=".EditEarnings"
+            android:exported="true"/>
     </application>
 
 </manifest>
