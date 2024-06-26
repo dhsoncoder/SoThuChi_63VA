@@ -20,6 +20,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Date;
 
 public class TienThuFragment extends Fragment {
     private DatabaseHelper databaseHelper;
@@ -72,8 +73,18 @@ public class TienThuFragment extends Fragment {
 
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
-            public void onPositiveButtonClick(Object Selection) {
-                calendarText.setText(materialDatePicker.getHeaderText());
+            public void onPositiveButtonClick(Object selection) {
+                // Convert the selection to a Long
+                Long selectedDate = (Long) selection;
+
+                // Create a new Date object from the selectedDate
+                Date date = new Date(selectedDate);
+
+                // Create a SimpleDateFormat to format the Date object
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+                // Set the text of calendarText to the formatted date
+                calendarText.setText(dateFormat.format(date));
             }
         });
 
