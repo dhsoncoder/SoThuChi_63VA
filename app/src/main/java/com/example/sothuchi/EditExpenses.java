@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,26 +21,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class EditEarnings extends AppCompatActivity {
-
+public class EditExpenses extends AppCompatActivity {
     TextView calendarText;
-    private GridView gridViewDanhmuc;
     ImageView imgLeft, imgRight;
     EditText edtExpense,edtIncome, edtNote;
     Button button;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_edit_earnings);
+        setContentView(R.layout.activity_edit_expenses);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         // Initialize the TextViews and EditTexts
         calendarText = findViewById(R.id.edt_calender);
         imgLeft = findViewById(R.id.imgLeft);
@@ -49,7 +43,6 @@ public class EditEarnings extends AppCompatActivity {
         edtIncome = findViewById(R.id.edtIncome);
         edtNote = findViewById(R.id.edtNote);
         button = findViewById(R.id.button);
-
 
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select a date");
@@ -162,4 +155,5 @@ public class EditEarnings extends AppCompatActivity {
             }
         });
     }
-}
+    }
+

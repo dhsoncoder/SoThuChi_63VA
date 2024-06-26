@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new BaocaoThangFragment();
 
             } else if (itemId == R.id.trangphanloai) {
-                Intent intent = new Intent(this, PLChitieuMoiActivity.class);
+                Intent intent = new Intent(this, TrangDSPhanloaiActivity.class);
 
                 startActivity(intent);
 

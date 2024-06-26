@@ -3,8 +3,10 @@ package com.example.sothuchi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -368,7 +370,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
                 String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
                 String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-                list.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu));
+                int id_dm = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
+                list.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu,id_dm));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -386,7 +389,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
                 String ngayThang = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
                 String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-                thuChiList.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu));
+                int id_dm = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
+                thuChiList.add(new ThuChi(id, soTien, loai, ngayThang, ghiChu,id_dm));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -408,12 +412,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
             String ngayThuchi = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
             String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-
+            int id_dm= cursor.getInt(cursor.getColumnIndex(COLUMN_MA_DANHMUC));
             cursor.close();
 
-            return new ThuChi(maThuchi, soTien, loai, ngayThuchi, ghiChu);
+            return new ThuChi(maThuchi, soTien, loai, ngayThuchi, ghiChu,id_dm);
         }
 
         return null;
     }
+    public void insertSampleData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Clear existing data
+        db.delete(TABLE_DANHMUC, null, null);
+        db.delete(TABLE_THUCHI, null, null);
+
+        // Insert sample categories (danhmuc)
+        long result1 = insertDanhmuc("Ăn uống", 1, R.drawable.ic_food, "#FF0000");
+        long result2 = insertDanhmuc("Giải trí", 1, R.drawable.ic_next, "#00FF00");
+        long result3 = insertDanhmuc("Y tế", 1, R.drawable.ic_calendar, "#0000FF");
+
+        long result4 = insertDanhmuc("Tiền lương", 0, R.drawable.ic_food, "#FF0000");
+        long result5 = insertDanhmuc("Làm thêm", 0, R.drawable.ic_next, "#00FF00");
+        long result6 = insertDanhmuc("Thưởng", 0, R.drawable.ic_calendar, "#0000FF");
+
+        // Log the result to check if data is inserted correctly
+        Log.d("DatabaseHelper", "insertSampleData: " + result1 + ", " + result2 + ", " + result3 + ", " + result4 + ", " + result5 + ", " + result6);
+
+        // Insert sample expenses (thuchi)
+        insertThuchi(1, 100000, 1, "26/06/2024", "Ăn uống");
+        insertThuchi(2, 150000, 1, "25/06/2024", "Xem phim");
+        insertThuchi(3, 200000, 1, "24/06/2024", "Thuốc");
+
+        insertThuchi(4, 100000, 0, "26/06/2024", "Tiền lương");
+        insertThuchi(5, 150000, 0, "25/06/2024", "Làm thêm");
+        insertThuchi(6, 200000, 0, "24/06/2024", "Thưởng");
+    }
+    // Get all records from danhmuc where loai 1
+    public Cursor getDanhmucLoai1() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_DANHMUC, null, COLUMN_LOAI + " = ?", new String[]{"1"}, null, null, null);
+    }
+
+    // Get all records from danhmuc where loai 0
+    public Cursor getDanhmucLoai0() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_DANHMUC, null, COLUMN_LOAI + " = ?", new String[]{"0"}, null, null, null);
+    }
+
+    // Get all DanhMuc by Loai
+    public List<DanhMuc> getAllDanhMucByLoai(int loai) {
+        List<DanhMuc> danhMucList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {
+                COLUMN_MA_DANHMUC,
+                COLUMN_TEN_DANHMUC,
+                COLUMN_BIEUTUONG,
+                COLUMN_MAUSAC
+        };
+        String selection = COLUMN_LOAI + " = ?";
+        String[] selectionArgs = { String.valueOf(loai) };
+
+        Cursor cursor = db.query(TABLE_DANHMUC, columns, selection, selectionArgs, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int maDanhMuc = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MA_DANHMUC));
+                String tenDanhMuc = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEN_DANHMUC));
+                int bieuTuong = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BIEUTUONG));
+                String mauSac = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAUSAC));
+
+                // Kiểm tra xem danh mục này đã có trong danh sách chưa
+                boolean exists = false;
+                for (DanhMuc danhMuc : danhMucList) {
+                    if (danhMuc.getTenDanhMuc().equals(tenDanhMuc) &&
+                            danhMuc.getBieuTuong() == bieuTuong &&
+                            danhMuc.getMauSac().equals(mauSac)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                // Nếu chưa tồn tại, thêm vào danh sách
+                if (!exists) {
+                    DanhMuc danhMuc = new DanhMuc();
+                    danhMuc.setMaDanhMuc(maDanhMuc);
+                    danhMuc.setTenDanhMuc(tenDanhMuc);
+                    danhMuc.setBieuTuong(bieuTuong);
+                    danhMuc.setMauSac(mauSac);
+
+                    danhMucList.add(danhMuc);
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return danhMucList;
+    }
+    // Delete a DanhMuc by ID
+    public void deleteDanhMuc(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Xác nhận xóa trước khi thực hiện
+        try {
+            db.beginTransaction();
+            // Thực hiện xóa
+            db.delete(TABLE_DANHMUC, COLUMN_MA_DANHMUC + " = ?", new String[]{String.valueOf(id)});
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
 }

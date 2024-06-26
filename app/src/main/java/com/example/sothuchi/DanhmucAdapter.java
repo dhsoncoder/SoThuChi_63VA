@@ -71,4 +71,15 @@ public class DanhmucAdapter extends BaseAdapter {
     public int getSelectedPosition() {
         return selectedPosition;
     }
+
+    // New method to swap cursor and refresh data
+    public void swapCursor(Cursor newCursor) {
+        if (newCursor != cursor) {
+            cursor = newCursor;
+            notifyDataSetChanged();
+        }
+    }
+    public Cursor getCursor() {
+        return cursor;
+    }
 }

@@ -137,7 +137,7 @@ public void resetUI(){
             totalExpense += thuChi.getSoTien();
         }
     }
-    double total = totalIncome - totalExpense;
+    double total = totalIncome + totalExpense;
 
     // Update the TextViews
     tvThuNhap.setText(String.format("%,.0fđ", totalIncome));

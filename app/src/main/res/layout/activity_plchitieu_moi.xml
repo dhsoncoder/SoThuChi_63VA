@@ -55,6 +55,7 @@
             android:layout_height="55dp"
             android:layout_margin="12dp"
             android:background="@drawable/rounded_card_background"
+            android:backgroundTint="#FFFFFF"
             app:cardCornerRadius="25dp"
             app:cardElevation="4dp">
 

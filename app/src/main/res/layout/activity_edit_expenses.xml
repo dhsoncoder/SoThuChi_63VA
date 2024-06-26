@@ -113,6 +113,6 @@
         android:backgroundTint="#69C0FF"
         android:layout_marginTop="40dp"
         android:padding="13dp"
-        android:text="Sửa khoản thu"
+        android:text="Sửa khoản chi"
         android:textSize="18sp" />
 </LinearLayout>

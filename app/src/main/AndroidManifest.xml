@@ -13,8 +13,11 @@
         android:theme="@style/Theme.SoThuChi"
         tools:targetApi="31">
         <activity
+            android:name=".EditExpenses"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,9 +29,10 @@
             android:exported="false" />
         <activity
             android:name=".TrangBaoCaoActivity"
-            android:exported="true"/>
-        <activity android:name=".EditEarnings"
-            android:exported="true"/>
+            android:exported="true" />
+        <activity
+            android:name=".EditEarnings"
+            android:exported="true" />
         <activity
             android:name=".SuaPLThunhapActivity"
             android:exported="false" />
@@ -43,7 +47,7 @@
             android:exported="true" />
         <activity
             android:name=".TrangDSPhanloaiActivity"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>
