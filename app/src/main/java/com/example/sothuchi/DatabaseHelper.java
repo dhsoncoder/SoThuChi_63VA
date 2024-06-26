@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database constants
@@ -314,6 +311,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return totalAmount;
     }
 
+    // Get all records from danhmuc where loai is 1
+    public Cursor getDanhmucByLoai(int loai) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_DANHMUC,
+                null,
+                COLUMN_LOAI + " = ?",
+                new String[]{String.valueOf(loai)},
+                null,
+                null,
+                null);
+    }
     // Get all records from thuchi as a List of Strings
     public List<ThuChi> getThuchiByMonth(int month, int year) {
         List<ThuChi> list = new ArrayList<>();
@@ -338,45 +346,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM ThuChi WHERE ngay_thuchi = ?", new String[]{date});
 
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_THUCHI));
-                double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
-                int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
-                String ngay = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
-                String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-
-                ThuChi thuChi = new ThuChi(id, soTien, loai, ngay, ghiChu);
-                thuChiList.add(thuChi);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-
-        return thuChiList;
-    }
-    public ThuChi getThuChiById(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_THUCHI,
-                null,
-                COLUMN_MA_THUCHI + " = ?",
-                new String[]{String.valueOf(id)},
-                null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int maThuchi = cursor.getInt(cursor.getColumnIndex(COLUMN_MA_THUCHI));
-            double soTien = cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
-            int loai = cursor.getInt(cursor.getColumnIndex(COLUMN_LOAI));
-            String ngayThuchi = cursor.getString(cursor.getColumnIndex(COLUMN_NGAY_THUCHI));
-            String ghiChu = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU));
-
-            cursor.close();
-
-            return new ThuChi(maThuchi, soTien, loai, ngayThuchi, ghiChu);
-        }
-
-        return null;
-    }
 }

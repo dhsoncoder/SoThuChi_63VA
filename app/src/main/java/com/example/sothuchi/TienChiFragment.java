@@ -1,12 +1,17 @@
 package com.example.sothuchi;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,18 +22,34 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class TienChiFragment extends Fragment {
+    private DatabaseHelper databaseHelper;
+    private GridView gridViewDanhmuc;
+    private DanhmucAdapter adapter;
 
     TextView calendarText;
     ImageView imgLeft, imgRight;
     EditText edtExpense, edtNote;
+    Button btnExpense;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tienchi, container, false);
+        View view = inflater.inflate(R.layout.fragment_tienchi, container, false);
+        gridViewDanhmuc = view.findViewById(R.id.gridViewDanhmuc);
+        databaseHelper = new DatabaseHelper(getContext());
+
+        // Lấy dữ liệu từ database
+        Cursor cursor = databaseHelper.getDanhmucByLoai(1);
+
+        // Tạo adapter và thiết lập cho GridView
+        adapter = new DanhmucAdapter(getContext(), cursor);
+        gridViewDanhmuc.setAdapter(adapter);
+
+        return view;
     }
 
     @Override
@@ -40,23 +61,33 @@ public class TienChiFragment extends Fragment {
         imgRight = view.findViewById(R.id.imgRight);
         edtExpense = view.findViewById(R.id.edtExpense);
         edtNote = view.findViewById(R.id.edtNote);
+        btnExpense = view.findViewById(R.id.btnExpense);
 
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select a date");
+        builder.setTitleText("Chọn ngày");
         final MaterialDatePicker materialDatePicker = builder.build();
 
         calendarText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View V){
-                materialDatePicker .show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
+            public void onClick(View V) {
+                materialDatePicker.show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
             }
-
         });
 
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
-            public void onPositiveButtonClick(Object Selection) {
-                calendarText.setText(materialDatePicker.getHeaderText());
+            public void onPositiveButtonClick(Object selection) {
+                // Convert the selection to a Long
+                Long selectedDate = (Long) selection;
+
+                // Create a new Date object from the selectedDate
+                Date date = new Date(selectedDate);
+
+                // Create a SimpleDateFormat to format the Date object
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+                // Set the text of calendarText to the formatted date
+                calendarText.setText(dateFormat.format(date));
             }
         });
 
@@ -65,7 +96,6 @@ public class TienChiFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(calendar.getTime());
         calendarText.setText(currentDate);
-
 
         // Set onClick listeners for imgLeft and imgRight
         imgLeft.setOnClickListener(new View.OnClickListener() {
@@ -106,13 +136,53 @@ public class TienChiFragment extends Fragment {
         edtNote.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && edtNote.getText().toString().equals("Not entered")) {
+                if (hasFocus && edtNote.getText().toString().equals("Trống")) {
                     edtNote.setText("");
                 } else if (!hasFocus && edtNote.getText().toString().isEmpty()) {
-                    edtNote.setText("Not entered");
+                    edtNote.setText("Trống");
                 }
             }
         });
-        //
+
+        // Set item click listener for GridView
+        gridViewDanhmuc.setOnItemClickListener((parent, view1, position, id) -> {
+            adapter.setSelectedPosition(position);
+        });
+
+        // Set onClick listener for btnExpense
+        btnExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedDate = calendarText.getText().toString();
+                String expenseText = edtExpense.getText().toString();
+                String noteText = edtNote.getText().toString();
+                int selectedPosition = adapter.getSelectedPosition();
+
+                if (selectedPosition == -1) {
+                    Toast.makeText(getContext(), "Vui lòng chọn danh mục", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(selectedDate) || TextUtils.isEmpty(expenseText) || "0.00".equals(expenseText)) {
+                    Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int maDanhmuc = (int) adapter.getItemId(selectedPosition);
+                double soTien = Double.parseDouble(expenseText);
+
+                // Lưu dữ liệu vào cơ sở dữ liệu
+                long result = databaseHelper.insertThuchi(maDanhmuc, soTien, 1, selectedDate, noteText);
+                if (result != -1) {
+                    Toast.makeText(getContext(), "Thêm khoản chi thành công", Toast.LENGTH_SHORT).show();
+                    // Xóa dữ liệu sau khi lưu thành công
+                    edtExpense.setText("0.00");
+                    edtNote.setText("Trống");
+                    adapter.setSelectedPosition(-1);
+                } else {
+                    Toast.makeText(getContext(), "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
