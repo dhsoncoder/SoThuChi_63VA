@@ -59,7 +59,7 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:id="@+id/lv_lich"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
@@ -68,7 +68,12 @@
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/layout_view">
+                android:layout_marginBottom="228dp"
+                android:background="@drawable/layout_view"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <!-- Expense and Income Summary -->
                 <LinearLayout

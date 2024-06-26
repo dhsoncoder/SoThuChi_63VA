@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database constants
@@ -311,5 +314,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return totalAmount;
     }
 
-
+    // Get all records from thuchi as a List of Strings
+    public List<String> getAllThuchiAsStringList() {
+        List<String> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_GHICHU + ", " + COLUMN_SO_TIEN + " FROM " + TABLE_THUCHI, null);
+        if (cursor.moveToFirst()) {
+            do {
+                // Concatenate the ghi chu and so tien columns
+                String item = cursor.getString(cursor.getColumnIndex(COLUMN_GHICHU)) + " - " +
+                        cursor.getDouble(cursor.getColumnIndex(COLUMN_SO_TIEN));
+                list.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
 }
