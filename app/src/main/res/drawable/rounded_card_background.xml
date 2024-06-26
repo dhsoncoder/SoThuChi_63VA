@@ -4,8 +4,8 @@
     <corners android:radius="100dp" /> <!-- Set radius to half the width/height for circle -->
     <gradient
         android:angle="45"
-        android:startColor="#FF5733"
-        android:centerColor="#FFC300"
-        android:endColor="#36D7B7"
+        android:startColor="#E6E6E6"
+        android:centerColor="#E6E6E6"
+        android:endColor="#E6E6E6"
         android:type="linear" />
 </shape>
