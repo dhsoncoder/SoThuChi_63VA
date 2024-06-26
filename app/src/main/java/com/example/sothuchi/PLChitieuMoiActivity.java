@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class PLChitieuMoiActivity extends AppCompatActivity {
 
-    private int[] imageName = {R.drawable.atm, R.drawable.balance, R.drawable.bieudo2, R.drawable.cake, R.drawable.subway};
+    private int[] imageName = {R.drawable.am_nhac, R.drawable.an_uong, R.drawable.atm, R.drawable.boi, R.drawable.ca_phe, R.drawable.cake, R.drawable.cham_con, R.drawable.choi_game, R.drawable.chup_anh, R.drawable.cuoc_goi, R.drawable.dien, R.drawable.dien_thoai, R.drawable.do_an, R.drawable.do_xang, R.drawable.hoc_phi, R.drawable.hoc_phi2, R.drawable.kem, R.drawable.laptop, R.drawable.mang_thai, R.drawable.may_bay, R.drawable.mua_sam, R.drawable.ngan_hang, R.drawable.ngu, R.drawable.pin, R.drawable.ruou, R.drawable.tai_nghe, R.drawable.the_thao, R.drawable.thu_cung, R.drawable.thuoc_la, R.drawable.tien_mang, R.drawable.tien_nha, R.drawable.tin_nhan, R.drawable.trong_cay, R.drawable.y_te, R.drawable.yeu_duong, R.drawable.xa_giao, R.drawable.sac_dien, R.drawable.tiec_tung };
     private GridView gridViewDemo;
     private MyarrayAdapter adapterDanhSach;
     private ArrayList<Image> arrimage;

@@ -13,19 +13,19 @@
         android:theme="@style/Theme.SoThuChi"
         tools:targetApi="31">
         <activity
-            android:name=".TrangBaoCaoNamActivity"
+            android:name=".SuaPLThunhapActivity"
             android:exported="false" />
         <activity
-            android:name=".ThunhapThangActivity"
+            android:name=".SuaPLChitieuActivity"
             android:exported="false" />
         <activity
-            android:name=".ChitieuThangActivity"
+            android:name=".PLThunhapMoiActivity"
             android:exported="true" />
         <activity
-            android:name=".TrangPhanLoaiActivity"
-            android:exported="false" />
+            android:name=".PLChitieuMoiActivity"
+            android:exported="true" />
         <activity
-            android:name=".TrangBaoCaoActivity"
+            android:name=".TrangDSPhanloaiActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
